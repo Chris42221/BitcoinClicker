@@ -1,3 +1,4 @@
+
 import { Scene } from 'phaser';
 
 export class Preloader extends Scene
@@ -9,38 +10,44 @@ export class Preloader extends Scene
 
     init ()
     {
-        //  We loaded this image in our Boot Scene, so we can display it here
-        this.add.image(512, 384, 'background');
+        // Wenn texture bereits existiert, anzeigen, sonst nicht (wird in preload geladen)
+        if (this.textures.exists('background')) {
+            this.add.image(this.scale.width/2, this.scale.height/2, 'background');
+        }
 
-        //  A simple progress bar. This is the outline of the bar.
-        this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
+        // Outline der Ladeleiste
+        this.add.rectangle(this.scale.width/2, this.scale.height/2, 468, 32).setStrokeStyle(1, 0xffffff);
 
-        //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-        const bar = this.add.rectangle(512-230, 384, 4, 28, 0xffffff);
+        // Die eigentliche Leiste: Ursprung links mittig, startet bei Breite 0
+        this.loadingBar = this.add.rectangle(this.scale.width/2 - 230, this.scale.height/2, 0, 28, 0xffffff).setOrigin(0, 0.5);
 
-        //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
+        // Progress-Event (wird schon im preload ausgelöst, hier ist ok)
         this.load.on('progress', (progress) => {
+            // 460px max
+            this.loadingBar.width = Math.max(0, 460 * progress);
+        });
 
-            //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
-            bar.width = 4 + (460 * progress);
-
+        // Fehler / Debug anzeigen
+        this.load.on('loaderror', (file) => {
+            console.warn('Load error', file);
         });
     }
 
     preload ()
     {
-        //  Load the assets for the game - Replace with your own assets
+        // Assets-Pfad anpassen falls nötig
         this.load.setPath('assets');
 
+        // Lade Background hier sicher mit (falls Boot das nicht gemacht hat)
+        this.load.image('background', 'background.png');
+
+        // Logo laden
         this.load.image('logo', 'logo.png');
     }
 
     create ()
     {
-        //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-        //  For example, you can define global animations here, so we can use them in other scenes.
-
-        //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
+        // Jetzt sind alle geladenen Assets verfügbar
         this.scene.start('MainMenu');
     }
 }
