@@ -20,9 +20,7 @@ const config = {
     scene: [
         Boot,
         Preloader,
-        MainMenu,
-        MainGame,
-        GameOver
+        MainMenu
     ]
 };
 
