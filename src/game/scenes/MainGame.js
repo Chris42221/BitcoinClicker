@@ -1,11 +1,14 @@
-
 import { Scene } from 'phaser';
+import addToScore from './addScore';
 
-export class Preloader extends Scene
-{
-    constructor ()
-    {
-        super('Preloader');
+export default class MainGame extends Scene {
+
+    coin;
+    score = 0;
+    scoreboard;
+
+    constructor() {
+        super('MainGame');
     }
 
     init ()
@@ -33,21 +36,30 @@ export class Preloader extends Scene
         });
     }
 
-    preload ()
-    {
-        // Assets-Pfad anpassen falls nötig
+    preload() {
+
         this.load.setPath('assets');
 
-        // Lade Background hier sicher mit (falls Boot das nicht gemacht hat)
-        this.load.image('background', 'background.png');
-
-        // Logo laden
-        this.load.image('logo', 'logo.png');
+        // Ressourcen laden
+        this.load.image("coin","coin.png");
     }
 
-    create ()
-    {
-        // Jetzt sind alle geladenen Assets verfügbar
-        this.scene.start('MainMenu');
+    create() {
+        // Hauptspiellogik hier
+        this.coin = this.add.image(600, 300, "coin");
+
+        this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' })
+
+        this.coin = new Phaser.Geom.Circle(this.coin.x, this.coin.y, this.coin.width/2);
+
+        this.input.on('pointerdown', (pointer) => {
+            if (Phaser.Geom.Circle.Contains(this.coin, pointer.x, pointer.y)) {
+                console.log("Hit");
+                this.score = addToScore(this.score,1);
+                this.scoreboard.setText(this.score);
+            }
+        });
     }
+
+    
 }
