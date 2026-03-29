@@ -1,11 +1,15 @@
 import { Scene } from 'phaser';
-import addToScore from './addScore';
+import { addToScore, upgrade1Score } from './f_addScore';
 
 export default class MainGame extends Scene {
 
+    //Variablen
     coin;
+
     score = 0;
     scoreboard;
+
+    upgrade1;
 
     constructor() {
         super('MainGame');
@@ -37,29 +41,52 @@ export default class MainGame extends Scene {
     }
 
     preload() {
-
+        // Ressourcen laden
+        //Laden der Pfade
         this.load.setPath('assets');
 
-        // Ressourcen laden
+        //Laden der Bilder
         this.load.image("coin","coin.png");
+
+        //Laden der Sounds
+        this.load.audio("CoinClickSound","CoinClickSound.mp3");
+        this.load.audio("DeclineSound","DeclineSound.mp3");
     }
 
     create() {
         // Hauptspiellogik hier
         this.coin = this.add.image(600, 300, "coin");
+        this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
+        this.upgrade1 = this.add.text(100,200,'Upgrade',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
 
-        this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' })
+        // Die Objekte werden jetzt für Interactionen freigegeben
+        this.coin.setInteractive();
+        this.upgrade1.setInteractive();
 
-        this.coin = new Phaser.Geom.Circle(this.coin.x, this.coin.y, this.coin.width/2);
-
-        this.input.on('pointerdown', (pointer) => {
-            if (Phaser.Geom.Circle.Contains(this.coin, pointer.x, pointer.y)) {
-                console.log("Hit");
-                this.score = addToScore(this.score,1);
-                this.scoreboard.setText(this.score);
-            }
+        //Überprüft ob ein Game Objekt was eine Funktion hat angelickt wurde
+        this.coin.on('pointerdown', () => {
+            this.score = addToScore(this.score,1);
+            this.scoreboard.setText(this.score);
+            
+            this.sound.play("CoinClickSound");
         });
-    }
+        this.upgrade1.on("pointerdown", ()=>{
+            if (this.score >= 10){
+                console.log("upgrade");
 
+                this.score -=  10;
+                this.scoreboard.setText(this.score);
+
+                setInterval(() => {
+                    this.score = upgrade1Score(this.score);
+                    this.scoreboard.setText(this.score);
+                }, 5000);
+
+                this.upgrade1.disableInteractive();
+            }else{
+                this.sound.play("DeclineSound");
+            }
+        })
+    }
     
 }
