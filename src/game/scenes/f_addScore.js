@@ -6,6 +6,6 @@ export function addToScore(score,a){
 
 export function GPUScore(score,BTCsec){
     let ReturnScore;
-    ReturnScore = score + BTCsec;
+    ReturnScore = score + BTCsec/10;
     return ReturnScore;
 }

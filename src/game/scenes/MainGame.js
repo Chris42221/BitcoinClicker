@@ -14,6 +14,9 @@ export default class MainGame extends Scene {
     GPU2;
     GPU3;
 
+    //Grafikkarten Level status
+    GPU1Status;
+
     constructor() {
         super('MainGame');
     }
@@ -85,7 +88,7 @@ export default class MainGame extends Scene {
 
                 setInterval(() => {
                     this.score = GPUScore(this.score,1);
-                    this.scoreboard.setText(this.score);
+                    this.scoreboard.setText(Math.round(this.score));
                 }, 100);
 
                 this.GPU1.disableInteractive();
@@ -102,8 +105,8 @@ export default class MainGame extends Scene {
 
                 setInterval(()=>{
                     this.score = GPUScore(this.score,10);
-                    this.scoreboard.setText(this.score);
-                },1000)
+                    this.scoreboard.setText(Math.round(this.score));
+                },100)
             }else{
                 this.sound.play("DeclineSound");
             }
@@ -111,7 +114,9 @@ export default class MainGame extends Scene {
     }
 
     update(){
-        //if()
+       if(this.GPU1Status == true){
+        
+       }
     }
     
 }
