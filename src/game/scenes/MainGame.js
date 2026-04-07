@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { addToScore, upgrade1Score } from './f_addScore';
+import { addToScore, GPUScore } from './f_addScore';
 
 export default class MainGame extends Scene {
 
@@ -9,7 +9,10 @@ export default class MainGame extends Scene {
     score = 0;
     scoreboard;
 
-    upgrade1;
+    //Grafikkarten
+    GPU1;
+    GPU2;
+    GPU3;
 
     constructor() {
         super('MainGame');
@@ -57,11 +60,14 @@ export default class MainGame extends Scene {
         // Hauptspiellogik hier
         this.coin = this.add.image(600, 300, "coin");
         this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
-        this.upgrade1 = this.add.text(100,200,'Upgrade',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
+        this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
+        this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
+
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.coin.setInteractive();
-        this.upgrade1.setInteractive();
+        this.GPU1.setInteractive();
+        this.GPU2.setInteractive();
 
         //Überprüft ob ein Game Objekt was eine Funktion hat angelickt wurde
         this.coin.on('pointerdown', () => {
@@ -70,23 +76,43 @@ export default class MainGame extends Scene {
             
             this.sound.play("CoinClickSound");
         });
-        this.upgrade1.on("pointerdown", ()=>{
+        this.GPU1.on("pointerdown", ()=>{
             if (this.score >= 10){
-                console.log("upgrade");
+                console.log("GPU1");
 
                 this.score -=  10;
                 this.scoreboard.setText(this.score);
 
                 setInterval(() => {
-                    this.score = upgrade1Score(this.score);
+                    this.score = GPUScore(this.score,1);
                     this.scoreboard.setText(this.score);
-                }, 5000);
+                }, 100);
 
-                this.upgrade1.disableInteractive();
+                this.GPU1.disableInteractive();
+            }else{
+                this.sound.play("DeclineSound");
+            }
+        })
+        this.GPU2.on("pointerdown", ()=>{
+            if (this.score >= 100){
+                console.log("GPU2")
+
+                this.score -= 100;
+                this.scoreboard.setText(this.score);
+
+                setInterval(()=>{
+                    this.score = GPUScore(this.score,10);
+                    this.scoreboard.setText(this.score);
+                },1000)
             }else{
                 this.sound.play("DeclineSound");
             }
         })
     }
+
+    update(){
+        //if()
+    }
     
 }
+

@@ -4,7 +4,8 @@ export function addToScore(score,a){
     return score;
 } 
 
-export function upgrade1Score(score){
-    score++;
-    return score;
+export function GPUScore(score,BTCsec){
+    let ReturnScore;
+    ReturnScore = score + BTCsec;
+    return ReturnScore;
 }
