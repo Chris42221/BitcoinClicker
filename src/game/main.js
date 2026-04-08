@@ -6,7 +6,7 @@ import MainMenu from './scenes/MainMenu';
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
-    type: AUTO,
+    type: Phaser.WEBGL,
     width: screen.width,
     height: screen.height,
     parent: 'game-container',
