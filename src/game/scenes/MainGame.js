@@ -22,16 +22,16 @@ export default class MainGame extends Scene {
     GPU10;
 
     //Grafikkarten Level status
-    GPU1Status = 0;
-    GPU2Status = 0;
-    GPU3Status = 0;
-    GPU4Status = 0;
-    GPU5Status = 0;
-    GPU6Status = 0;
-    GPU7Status = 0;
-    GPU8Status = 0;
-    GPU9Status = 0;
-    GPU10Status = 0;
+    GPU1Stats = 0;
+    GPU2Stats = 0;
+    GPU3Stats = 0;
+    GPU4Stats = 0;
+    GPU5Stats = 0;
+    GPU6Stats = 0;
+    GPU7Stats = 0;
+    GPU8Stats = 0;
+    GPU9Stats = 0;
+    GPU10Stats = 0;
 
     constructor() {
         super('MainGame');
@@ -118,7 +118,7 @@ export default class MainGame extends Scene {
 
                 this.score -=  10;
                 this.scoreboard.setText(this.score);
-                this.GPU1Status = 1;
+                this.GPU1Stats = 1;
                 this.GPU1.disableInteractive();
             }else{
                 this.sound.play("DeclineSound");
@@ -145,8 +145,8 @@ export default class MainGame extends Scene {
     }
     
     UpdateTheScoreOfBitcoin(){
-        console.log(this.GPU1Status);
-        if(this.GPU1Status > 0){
+        console.log(this.GPU1Stats);
+        if(this.GPU1Stats > 0){
             this.score = GPUScore(this.score,1);
             this.scoreboard.setText(Math.round(this.score));
         }
