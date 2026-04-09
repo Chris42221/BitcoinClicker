@@ -4,8 +4,14 @@ export function addToScore(score,a){
     return score;
 } 
 
-export function GPUScore(score,BTCsec){
+export function GPUScore(score,BTCsec,amount){
     let ReturnScore;
-    ReturnScore = score + BTCsec/10;
+    ReturnScore = score + (BTCsec/10)*amount;
     return ReturnScore;
+}
+
+export function GPUPrices(prices){
+    let ReturnPrices;
+    ReturnPrices = Math.round(prices*Math.sqrt(2));
+    return ReturnPrices;
 }
