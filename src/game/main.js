@@ -11,6 +11,9 @@ const config = {
     height: screen.height,
     parent: 'game-container',
     backgroundColor: '#ffffff',
+     dom: {
+        createContainer: true
+    },
     scene: [
         MainMenu,
         MainGame

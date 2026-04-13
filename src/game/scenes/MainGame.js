@@ -343,6 +343,15 @@ export default class MainGame extends Scene {
             }
         })
 
+        //Überprüft ob über etwas gehovert wurde
+        this.GPU1.on("pointerover", (pointer)=>{
+            let contentText = `Amount: ${this.GPU1Stats.amount} </br> Prices: ${this.GPU1Stats.prices} <br> Production: ${this.GPU1Stats.production}`;
+            text = scene.add.dom(pointer.x, pointer.y, 'div', 'background-color: rgba(0, 0, 0, 0.5); width: 220px; height: 100px; font: 16px Arial; color: #fff; display: none', 'Phaser');
+        });
+        this.GPU1.on("pointerout", ()=>{
+            thtext.destroy();
+        });
+
         //Intervall in dem das Spiel den Punktestand (Bitcoin Stand) updatet anhand der gekauften Grafikkarten
         setInterval(() => this.UpdateTheScoreOfBitcoin(), 100);
     }
