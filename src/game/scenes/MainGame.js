@@ -138,6 +138,7 @@ export default class MainGame extends Scene {
         this.load.setPath('assets');
 
         //Laden der Bilder
+        this.load.image("courser_normal","courser_normal.png")
         this.load.image("coin","coin.png");
 
         //Laden der Sounds
@@ -148,6 +149,10 @@ export default class MainGame extends Scene {
     create() {
         // Hauptspiellogik hier
 
+        //Setzten des Deault Courser
+        this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), default");
+
+        //Laden der Texte Bilder
         this.coin = this.add.image(600, 300, "coin");
         this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
@@ -163,7 +168,9 @@ export default class MainGame extends Scene {
 
 
         // Die Objekte werden jetzt für Interactionen freigegeben
-        this.coin.setInteractive();
+        this.coin.setInteractive({
+            cursor: "url(assets/cursors/harrow.cur), default",
+        });
         this.GPU1.setInteractive();
         this.GPU2.setInteractive();
         this.GPU3.setInteractive();
@@ -344,13 +351,13 @@ export default class MainGame extends Scene {
         })
 
         //Überprüft ob über etwas gehovert wurde
-        this.GPU1.on("pointerover", (pointer)=>{
+        /*this.GPU1.on("pointerover", (pointer)=>{
             let contentText = `Amount: ${this.GPU1Stats.amount} </br> Prices: ${this.GPU1Stats.prices} <br> Production: ${this.GPU1Stats.production}`;
             text = scene.add.dom(pointer.x, pointer.y, 'div', 'background-color: rgba(0, 0, 0, 0.5); width: 220px; height: 100px; font: 16px Arial; color: #fff; display: none', 'Phaser');
         });
         this.GPU1.on("pointerout", ()=>{
             thtext.destroy();
-        });
+        });*/
 
         //Intervall in dem das Spiel den Punktestand (Bitcoin Stand) updatet anhand der gekauften Grafikkarten
         setInterval(() => this.UpdateTheScoreOfBitcoin(), 100);
