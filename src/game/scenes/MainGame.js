@@ -5,6 +5,7 @@ export default class MainGame extends Scene {
 
     //Variablen
     coin;
+    background
 
     score = 0;
     scoreboard;
@@ -138,7 +139,7 @@ export default class MainGame extends Scene {
         this.load.setPath('assets');
 
         //Laden der Bilder
-        this.load.image("courser_normal","courser_normal.png")
+        this.load.image("GameBackground","GameBackground.png");
         this.load.image("coin","coin.png");
 
         //Laden der Sounds
@@ -153,6 +154,8 @@ export default class MainGame extends Scene {
         this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), default");
 
         //Laden der Texte Bilder
+        this.background = this.add.image(this.game.config.width/2,this.game.config.height/2,"GameBackground").setDisplaySize(window.innerWidth,window.innerHeight);
+        //this.add.tileSprite(this.game.config.width/2, this.game.config.height/2, window.screen.width, window.screen.height, "GameBackground");
         this.coin = this.add.image(600, 300, "coin");
         this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
@@ -169,7 +172,7 @@ export default class MainGame extends Scene {
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.coin.setInteractive({
-            cursor: "url(assets/cursors/harrow.cur), default",
+            cursor: "url(assets/cursors/harrow.cur), pointer",
         });
         this.GPU1.setInteractive();
         this.GPU2.setInteractive();
@@ -396,6 +399,10 @@ export default class MainGame extends Scene {
         }
 
         this.scoreboard.setText(Math.round(this.score));
+    }
+
+    update(){
+        this.background = this.background.setDisplaySize(window.innerWidth,window.innerHeight);
     }
 
 }

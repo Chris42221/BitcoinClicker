@@ -3,6 +3,8 @@ body {
     padding: 0;
     color: rgba(255, 255, 255, 0.87);
     background-color: #ffffff;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 #app {
