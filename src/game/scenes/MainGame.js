@@ -5,7 +5,8 @@ export default class MainGame extends Scene {
 
     //Variablen
     coin;
-    background
+    background;
+    BitCoinEXEBackground;
 
     score = 0;
     scoreboard;
@@ -141,6 +142,7 @@ export default class MainGame extends Scene {
         //Laden der Bilder
         this.load.image("GameBackground","GameBackground.png");
         this.load.image("coin","coin.png");
+        this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png")
 
         //Laden der Sounds
         this.load.audio("CoinClickSound","CoinClickSound.mp3");
@@ -155,6 +157,7 @@ export default class MainGame extends Scene {
 
         //Laden der Texte Bilder
         this.background = this.add.image(this.game.config.width/2,this.game.config.height/2,"GameBackground").setDisplaySize(window.innerWidth,window.innerHeight);
+        this.BitCoinEXEBackground = this.add.image(this.game.config.width/2,this.game.config.height/2,"BitCoinEXEBackground")
         //this.add.tileSprite(this.game.config.width/2, this.game.config.height/2, window.screen.width, window.screen.height, "GameBackground");
         this.coin = this.add.image(600, 300, "coin");
         this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
