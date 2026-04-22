@@ -11,6 +11,9 @@ export default class MainGame extends Scene {
     score = 0;
     scoreboard;
 
+    //Container
+    C_BitcoinEXE;
+
     //Grafikkarten
     GPU1;
     GPU2;
@@ -157,9 +160,13 @@ export default class MainGame extends Scene {
 
         //Laden der Texte Bilder
         this.background = this.add.image(this.game.config.width/2,this.game.config.height/2,"GameBackground").setDisplaySize(window.innerWidth,window.innerHeight);
-        this.BitCoinEXEBackground = this.add.image(this.game.config.width/2,this.game.config.height/2,"BitCoinEXEBackground")
-        //this.add.tileSprite(this.game.config.width/2, this.game.config.height/2, window.screen.width, window.screen.height, "GameBackground");
-        this.coin = this.add.image(600, 300, "coin");
+        this.BitCoinEXEBackground = this.add.image(0,0,"BitCoinEXEBackground");
+        this.coin = this.add.image(0, 0, "coin");
+
+        this.C_BitcoinEXE = this.add.container(this.game.config.width/2,this.game.config.height/2);
+        this.C_BitcoinEXE.addAt(this.BitCoinEXEBackground,0);
+        this.C_BitcoinEXE.addAt(this.coin,1);
+
         this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
         this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
@@ -187,8 +194,16 @@ export default class MainGame extends Scene {
         this.GPU8.setInteractive();
         this.GPU9.setInteractive();
         this.GPU10.setInteractive();
+        this.C_BitcoinEXE.setInteractive({
+            cursor: "url(assets/cursors/harrow.cur), pointer",
+            draggable: true,
+        });
 
         //Überprüft ob ein Game Objekt was eine Funktion hat angelickt wurde
+        this.C_BitcoinEXE.on("drag", (pointer, dragX, dragY) => {
+            this.C_BitcoinEXE.x = pointer.x;
+            this.C_BitcoinEXE.y = pointer.y;
+        })
         this.coin.on('pointerdown', () => {
             this.score = addToScore(this.score,1);
             this.scoreboard.setText(Math.round(this.score));
