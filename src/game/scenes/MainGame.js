@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { addToScore, GPUPrices, GPUScore } from './f_addScore';
+import { PercentCalculator } from './f_update';
 
 export default class MainGame extends Scene {
 
@@ -7,9 +8,13 @@ export default class MainGame extends Scene {
     coin;
     background;
     BitCoinEXEBackground;
+    activeZone = null;
 
     score = 0;
     scoreboard;
+
+    //Tollbar
+    ToolbarCoin;
 
     //Container
     C_BitcoinEXE;
@@ -162,12 +167,13 @@ export default class MainGame extends Scene {
         this.background = this.add.image(this.game.config.width/2,this.game.config.height/2,"GameBackground").setDisplaySize(window.innerWidth,window.innerHeight);
         this.BitCoinEXEBackground = this.add.image(0,0,"BitCoinEXEBackground");
         this.coin = this.add.image(0, 0, "coin");
+        this.scoreboard = this.add.text(-10,-300,this.score,{ fontFamily: '"Tiny5"', fontSize: 64, color: '#ffffff' });
 
         this.C_BitcoinEXE = this.add.container(this.game.config.width/2,this.game.config.height/2);
         this.C_BitcoinEXE.addAt(this.BitCoinEXEBackground,0);
         this.C_BitcoinEXE.addAt(this.coin,1);
+        this.C_BitcoinEXE.addAt(this.scoreboard,2)
 
-        this.scoreboard = this.add.text(100,100,this.score,{ fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
         this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
         this.GPU3 = this.add.text(100,300,"GPU3",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
@@ -181,9 +187,7 @@ export default class MainGame extends Scene {
 
 
         // Die Objekte werden jetzt für Interactionen freigegeben
-        this.coin.setInteractive({
-            cursor: "url(assets/cursors/harrow.cur), pointer",
-        });
+        this.coin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer",});
         this.GPU1.setInteractive();
         this.GPU2.setInteractive();
         this.GPU3.setInteractive();
@@ -195,15 +199,51 @@ export default class MainGame extends Scene {
         this.GPU9.setInteractive();
         this.GPU10.setInteractive();
         this.C_BitcoinEXE.setInteractive({
+            hitArea:{}, //new Phaser.Geom.Rectangle(-350, -400, 610, 50),
+            hitAreaCallback: (area, x, y,) => {
+                if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-350,-400,610,50),x,y)){
+                    this.activeZone = "drag";
+                    return true;
+                }
+                if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(300,-395,40,40),x,y)){
+                    this.activeZone = "close";
+                    return true;
+                }
+                if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(250,-395,40,40),x,y)){
+                    this.activeZone = "help";
+                    return true;
+                }
+                this.activeZone = null;
+                return false;
+        },
+            
+            //Phaser.Geom.Rectangle.Contains,
             cursor: "url(assets/cursors/harrow.cur), pointer",
             draggable: true,
         });
 
         //Überprüft ob ein Game Objekt was eine Funktion hat angelickt wurde
         this.C_BitcoinEXE.on("drag", (pointer, dragX, dragY) => {
-            this.C_BitcoinEXE.x = pointer.x;
-            this.C_BitcoinEXE.y = pointer.y;
+            if(this.activeZone === "drag"){
+                //this.input.setDefaultCursor("url(assets/cursors/harrow.cur), pointer"); //Curser ist umzuändern
+                this.C_BitcoinEXE.x = dragX;
+                this.C_BitcoinEXE.y = dragY;
+            }
         })
+        this.C_BitcoinEXE.on("pointerdown", (pointer) => {
+            switch(this.activeZone){
+                case "close":
+                    this.C_BitcoinEXE.destroy();
+                    this.BitCoinEXEBackground = null;
+                    this.coin = null;
+                    this.scoreboard = null;
+                    this.C_BitcoinEXE = null;
+                case "help":
+                    //Help Screen   
+                    console.log("Help");
+            }
+        })
+
         this.coin.on('pointerdown', () => {
             this.score = addToScore(this.score,1);
             this.scoreboard.setText(Math.round(this.score));
@@ -416,11 +456,15 @@ export default class MainGame extends Scene {
             this.score = GPUScore(this.score,this.GPU10Stats.production,this.GPU10Stats.amount);
         }
 
-        this.scoreboard.setText(Math.round(this.score));
+        if(this.scoreboard != null){
+            this.scoreboard.setText(Math.round(this.score));
+        }
     }
 
     update(){
         this.background = this.background.setDisplaySize(window.innerWidth,window.innerHeight);
+
+
     }
 
 }
