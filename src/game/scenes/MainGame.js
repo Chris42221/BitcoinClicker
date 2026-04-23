@@ -168,7 +168,7 @@ export default class MainGame extends Scene {
 
 
 
-        this.ToolbarCoin = this.add.image(400, 993,"");
+        this.ToolbarCoin = this.add.image(400, /*993*/400,"");
 
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
         this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
@@ -243,13 +243,21 @@ export default class MainGame extends Scene {
             });
 
 
+            this.C_BitcoinEXE.on("dragstart",() => {
+                if(this.activeZone === "drag"){
+                    this.input.setDefaultCursor("url(assets/cursors/hnesw.cur), pointer");
+                }
+            })
             this.C_BitcoinEXE.on("drag", (pointer, dragX, dragY) => {
                 if(this.activeZone === "drag"){
-                    //this.input.setDefaultCursor("url(assets/cursors/harrow.cur), pointer"); //Curser ist umzuändern
                     this.C_BitcoinEXE.x = dragX;
                     this.C_BitcoinEXE.y = dragY;
                 }
             })
+            this.C_BitcoinEXE.on("dragend",() => {
+                this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), pointer");
+            })
+
             this.C_BitcoinEXE.on("pointerdown", () => {
                 switch(this.activeZone){
                     case "close":
