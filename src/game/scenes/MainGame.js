@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { addToScore, GPUPrices, GPUScore } from './f_addScore';
-import { PercentCalculator } from './f_update';
+import { ScaleFaktor, getResponsiveSize } from './f_update';
 
 export default class MainGame extends Scene {
 
@@ -219,7 +219,7 @@ export default class MainGame extends Scene {
             });
 
             this.C_BitcoinEXE.setInteractive({
-                hitArea:{}, //new Phaser.Geom.Rectangle(-350, -400, 610, 50),
+                hitArea:{},
                 hitAreaCallback: (area, x, y,) => {
                     if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-350,-400,610,50),x,y)){
                         this.activeZone = "drag";
@@ -494,7 +494,17 @@ export default class MainGame extends Scene {
 
     update(){
         this.background = this.background.setDisplaySize(window.innerWidth,window.innerHeight);
+        if(this.C_BitcoinEXE != null){
+            let sizeB = getResponsiveSize(this.BitCoinEXEBackground.width,this.BitCoinEXEBackground.height,window.innerWidth,window.innerHeight);
+            //this.BitCoinEXEBackground = this.BitCoinEXEBackground.setDisplaySize(sizeB.width,sizeB.height);
+            this.BitCoinEXEBackground.setScale(sizeB.scale);
+            
+            let sizeC = getResponsiveSize(this.coin.width,this.coin.height,window.innerWidth,window.innerHeight);
+            //this.coin = this.coin.setDisplaySize(sizeC.width,sizeC.height);
+            this.coin.setScale(sizeC.scale);
 
+            this.scoreboard.setFontSize(64*sizeC.scale);
+        }
 
     }
 
