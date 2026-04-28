@@ -9,6 +9,7 @@ export default class MainGame extends Scene {
     background;
     BitCoinEXEBackground;
     activeZone = null;
+    staticObjects;
 
     score = 0;
     scoreboard;
@@ -168,7 +169,7 @@ export default class MainGame extends Scene {
 
 
 
-        this.ToolbarCoin = this.add.image(400, /*993*/400,"");
+        this.ToolbarCoin = this.add.image(window.innerWidth * 0.3,window.innerHeight * 0.7,"");
 
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
         this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
@@ -181,6 +182,10 @@ export default class MainGame extends Scene {
         this.GPU9 = this.add.text(100,600,"GPU9",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
         this.GPU10 = this.add.text(100,650,"GPU10",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
 
+        //Sezten der Positionen
+    this.staticObjects = [
+        { obj: this.ToolbarCoin,         relX: 0.3,  relY: 0.7  },
+    ];
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
@@ -442,6 +447,11 @@ export default class MainGame extends Scene {
             }
         })
 
+
+
+
+
+
         //Überprüft ob über etwas gehovert wurde
         /*this.GPU1.on("pointerover", (pointer)=>{
             let contentText = `Amount: ${this.GPU1Stats.amount} </br> Prices: ${this.GPU1Stats.prices} <br> Production: ${this.GPU1Stats.production}`;
@@ -494,18 +504,23 @@ export default class MainGame extends Scene {
 
     update(){
         this.background = this.background.setDisplaySize(window.innerWidth,window.innerHeight);
+
+        this.staticObjects.forEach(({ obj, relX, relY }) => {
+            obj.setPosition(window.innerWidth * relX, window.innerHeight * relY);
+            obj.setScale(Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
+        });
+
         if(this.C_BitcoinEXE != null){
             let sizeB = getResponsiveSize(this.BitCoinEXEBackground.width,this.BitCoinEXEBackground.height,window.innerWidth,window.innerHeight);
             //this.BitCoinEXEBackground = this.BitCoinEXEBackground.setDisplaySize(sizeB.width,sizeB.height);
-            this.BitCoinEXEBackground.setScale(sizeB.scale);
+            this.BitCoinEXEBackground.setScale(sizeB.scale/2);
             
             let sizeC = getResponsiveSize(this.coin.width,this.coin.height,window.innerWidth,window.innerHeight);
             //this.coin = this.coin.setDisplaySize(sizeC.width,sizeC.height);
-            this.coin.setScale(sizeC.scale);
+            this.coin.setScale(sizeC.scale/4);
 
-            this.scoreboard.setFontSize(64*sizeC.scale);
+            this.scoreboard.setFontSize(64*sizeC.scale/2.7);
         }
-
     }
 
 }
