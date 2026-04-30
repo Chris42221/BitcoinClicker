@@ -241,8 +241,6 @@ export default class MainGame extends Scene {
                     this.activeZone = null;
                     return false;
             },
-                
-                //Phaser.Geom.Rectangle.Contains,
                 cursor: "url(assets/cursors/harrow.cur), pointer",
                 draggable: true,
             });
