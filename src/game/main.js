@@ -6,19 +6,18 @@ import MainMenu from './scenes/MainMenu';
 //  Find out more information about the Game Config at:
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
-    type: Phaser.WEBGL,
-    width: screen.width,
-    height: screen.height,
-    parent: 'game-container',
-    backgroundColor: '#ffffff',
-     dom: {
-        createContainer: true
-    },
-    scene: [
-        MainMenu,
-        MainGame
-    ]
-};
+  type: Phaser.WEBGL,
+  parent: 'game-container',
+  backgroundColor: '#ffffff',
+  dom: { createContainer: true },
+
+  scale: {
+    mode: Phaser.Scale.RESIZE,         // Canvas = immer Browsergröße
+    autoCenter: Phaser.Scale.CENTER_BOTH, // Automatisch zentrieren
+  },
+
+  scene: [MainMenu, MainGame]
+}; 
 
 
 

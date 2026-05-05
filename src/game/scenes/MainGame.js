@@ -161,15 +161,17 @@ export default class MainGame extends Scene {
     create() {
         // Hauptspiellogik hier
 
+        const W = this.scale.width;
+        const H = this.scale.height;
         //Setzten des Deault Courser
         this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), default");
 
         //Laden der Texte Bilder
-        this.background = this.add.image(this.game.config.width/2,this.game.config.height/2,"GameBackground").setDisplaySize(window.innerWidth,window.innerHeight);
+        this.background = this.add.image(/*this.game.config.width/2,this.game.config.height/2,*/  W*0.5,H*0.5,"GameBackground").setDisplaySize(window.innerWidth,window.innerHeight);
 
 
 
-        this.ToolbarCoin = this.add.image(window.innerWidth * 0.3,window.innerHeight * 0.7,"");
+        this.ToolbarCoin = this.add.image(W * 0.2,H * 0.9777,"");
 
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
         this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
@@ -181,11 +183,6 @@ export default class MainGame extends Scene {
         this.GPU8 = this.add.text(100,550,"GPU8",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
         this.GPU9 = this.add.text(100,600,"GPU9",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
         this.GPU10 = this.add.text(100,650,"GPU10",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-
-        //Sezten der Positionen
-    this.staticObjects = [
-        { obj: this.ToolbarCoin,         relX: 0.3,  relY: 0.7  },
-    ];
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
@@ -200,6 +197,13 @@ export default class MainGame extends Scene {
         this.GPU8.setInteractive();
         this.GPU9.setInteractive();
         this.GPU10.setInteractive();
+
+        //Reagiert wenn die Größe sich verändert
+        this.scale.on('resize', this.onResize, this);
+
+        this.events.on('shutdown', () => {
+            this.scale.off('resize', this.onResize, this);
+        });
 
         //Überprüft ob ein Game Objekt was eine Funktion hat angelickt wurde
         this.ToolbarCoin.on("pointerdown", () =>{
@@ -501,12 +505,10 @@ export default class MainGame extends Scene {
     }
 
     update(){
-        this.background = this.background.setDisplaySize(window.innerWidth,window.innerHeight);
 
-        this.staticObjects.forEach(({ obj, relX, relY }) => {
-            obj.setPosition(window.innerWidth * relX, window.innerHeight * relY);
-            obj.setScale(Math.min(window.innerWidth / 1920, window.innerHeight / 1080));
-        });
+        let SizeTBC = getResponsiveSize(this.ToolbarCoin.width,this.ToolbarCoin.height,window.innerWidth,innerHeight);
+        this.ToolbarCoin = this.ToolbarCoin.setScale(SizeTBC.scale/27);
+        console.log(SizeTBC.scale);
 
         if(this.C_BitcoinEXE != null){
             let sizeB = getResponsiveSize(this.BitCoinEXEBackground.width,this.BitCoinEXEBackground.height,window.innerWidth,window.innerHeight);
@@ -521,5 +523,13 @@ export default class MainGame extends Scene {
         }
     }
 
+    onResize(gameSize) {
+        const W = gameSize.width;
+        const H = gameSize.height;
+
+        this.background ?.setPosition(W*.5, H*.5).setDisplaySize(W, H);
+
+        this.ToolbarCoin ?.setPosition(W * 0.2,H * 0.9777);
+    }
 }
 
