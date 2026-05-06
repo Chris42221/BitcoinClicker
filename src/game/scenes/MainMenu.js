@@ -20,18 +20,18 @@ export default class MainMenu extends Scene {
 
         console.log('MainMenu create called');
 
-        this.MainMenu = this.add.text(this.scale.width / 2, this.scale.height / 2, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' }).setOrigin(0.5);
+        this.MainMenu = this.add.text(this.scale.width / 2, 300, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' }).setOrigin(0.5);
 
         this.MainMenu.setInteractive();
 
         let username = "";
         let password = "";
-        let usernameeingabe = true;
+        let usernameeingabe;
         let passwordeingabe;
 
 
 
-        this.usernamebutton = this.add.text(700,200,"usernamebutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
+        this.usernamebutton = this.add.text(this.scale.width / 2,500,"usernamebutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
         this.usernamebutton.setInteractive();
         this.usernamebutton.on('pointerdown', () => {
             usernameeingabe = true;
@@ -39,7 +39,7 @@ export default class MainMenu extends Scene {
             console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
         });
         
-        this.passwordbutton = this.add.text(700,400,"passwordbutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
+        this.passwordbutton = this.add.text(this.scale.width / 2,800,"passwordbutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
         this.passwordbutton.setInteractive();
         this.passwordbutton.on('pointerdown', () => {
             passwordeingabe = true;
@@ -53,32 +53,35 @@ export default class MainMenu extends Scene {
 
 this.input.keyboard.on("keydown", (event) => {
     if (usernameeingabe == true) {
-        if (event.key === "Backspace") {
+        if (event.key == "Backspace") {
             username = username.slice(0, -1);
+            console.log("username: ", username)
         } else if(event.code.startsWith("Key")){
             username += event.key;
-            console.log(username)
+            console.log("username: ", username)
         }
     } 
     if (passwordeingabe == true) {
-        if(event.key === "Backspace"){
+        if(event.key == "Backspace"){
             password = password.slice(0, -1);
+            console.log("password: ", password)
         } else if (event.code.startsWith("Key")) {
             password += event.key;
-            console.log(password)
+            console.log("password: ", password)
         }
     }
 });
 
-
+        this.scene.start('MainGame');
         this.MainMenu.on('pointerdown', () => {
+            if(username === "admin" && password === "admin"){
             this.start = true;
             console.log('MainMenu clicked');
             console.log('start: ' + this.start); 
-
-        if(this.start === true){
             this.scene.start('MainGame');
-        }
+            }else{
+                console.log('MainMenu clicked - invalid credentials');
+            }
         });
 
 
