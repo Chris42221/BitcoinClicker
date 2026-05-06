@@ -210,13 +210,13 @@ export default class MainGame extends Scene {
             if(this.C_BitcoinEXE === null){
                 console.log("Bitcoin.exe");
                 this.BitCoinEXEBackground = this.add.image(0,0,"BitCoinEXEBackground");
-                this.coin = this.add.image(0, 0, "coin");
-                this.scoreboard = this.add.text(-10,-300,this.score,{ fontFamily: '"Tiny5"', fontSize: 64, color: '#ffffff' });
+                this.coin = this.add.image(0, 75, "coin");
+                this.scoreboard = this.add.text(-10,-200,this.score,{ fontFamily: '"Tiny5"', fontSize: 64, color: '#ffffff' });
 
                 this.C_BitcoinEXE = this.add.container(this.game.config.width/2,this.game.config.height/2);
                 this.C_BitcoinEXE.addAt(this.BitCoinEXEBackground,0);
                 this.C_BitcoinEXE.addAt(this.coin,1);
-                this.C_BitcoinEXE.addAt(this.scoreboard,2);
+                this.C_BitcoinEXE.addAt(this.scoreboard,1);
 
                 this.coin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer",});
 
@@ -230,7 +230,7 @@ export default class MainGame extends Scene {
             this.C_BitcoinEXE.setInteractive({
                 hitArea:{},
                 hitAreaCallback: (area, x, y,) => {
-                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-350,-400,610,50),x,y)){
+                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(300,-400,610,50),x,y)){
                         this.activeZone = "drag";
                         return true;
                     }
@@ -509,18 +509,10 @@ export default class MainGame extends Scene {
         let SizeTBC = getResponsiveSize(this.ToolbarCoin.width,this.ToolbarCoin.height,window.innerWidth,innerHeight);
         this.ToolbarCoin = this.ToolbarCoin.setScale(SizeTBC.scale/27);
         console.log(SizeTBC.scale);
+  
+        let sizeB = getResponsiveSize(this.BitCoinEXEBackground ?.width,this.BitCoinEXEBackground ?.height,window.innerWidth,window.innerHeight);
 
-        if(this.C_BitcoinEXE != null){
-            let sizeB = getResponsiveSize(this.BitCoinEXEBackground.width,this.BitCoinEXEBackground.height,window.innerWidth,window.innerHeight);
-            //this.BitCoinEXEBackground = this.BitCoinEXEBackground.setDisplaySize(sizeB.width,sizeB.height);
-            this.BitCoinEXEBackground.setScale(sizeB.scale/2);
-            
-            let sizeC = getResponsiveSize(this.coin.width,this.coin.height,window.innerWidth,window.innerHeight);
-            //this.coin = this.coin.setDisplaySize(sizeC.width,sizeC.height);
-            this.coin.setScale(sizeC.scale/4);
-
-            this.scoreboard.setFontSize(64*sizeC.scale/2.7);
-        }
+        this.C_BitcoinEXE ?.setScale(sizeB.scale/2);
     }
 
     onResize(gameSize) {
@@ -530,6 +522,9 @@ export default class MainGame extends Scene {
         this.background ?.setPosition(W*.5, H*.5).setDisplaySize(W, H);
 
         this.ToolbarCoin ?.setPosition(W * 0.2,H * 0.9777);
+
+        if(this.C_BitcoinEXE != null){
+        }
     }
 }
 
