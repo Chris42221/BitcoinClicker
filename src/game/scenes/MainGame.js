@@ -230,15 +230,15 @@ export default class MainGame extends Scene {
             this.C_BitcoinEXE.setInteractive({
                 hitArea:{},
                 hitAreaCallback: (area, x, y,) => {
-                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(300,-400,610,50),x,y)){
+                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-350,-300,610,50),x,y)){
                         this.activeZone = "drag";
                         return true;
                     }
-                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(300,-395,40,40),x,y)){
+                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(300,-290,40,40),x,y)){
                         this.activeZone = "close";
                         return true;
                     }
-                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(250,-395,40,40),x,y)){
+                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(250,-290,40,40),x,y)){
                         this.activeZone = "help";
                         return true;
                     }
