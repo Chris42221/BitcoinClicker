@@ -9,6 +9,8 @@ export default class MainGame extends Scene {
     coin;
     background;
     BitCoinEXEBackground;
+    UpdateEXEBackground;
+
     activeZone = null;
     staticObjects;
 
@@ -21,6 +23,7 @@ export default class MainGame extends Scene {
 
     //Container
     C_BitcoinEXE = null;
+    C_UpgradeEXE = null;
 
     //Grafikkarten
     GPU1;
@@ -188,6 +191,7 @@ export default class MainGame extends Scene {
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
+        this.ToolbarUpgrades.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
 
         this.GPU1.setInteractive();
         this.GPU2.setInteractive();
@@ -421,10 +425,11 @@ export default class MainGame extends Scene {
 
         let SizeTBU = getResponsiveSize(this.ToolbarUpgrades.width,this.ToolbarCoin.height,window.innerWidth,window.innerHeight);
         this.ToolbarUpgrades = this.ToolbarUpgrades.setScale(SizeTBU.scale/2.5);
-        console.log(SizeTBU.scale)
   
-        let sizeB = getResponsiveSize(this.BitCoinEXEBackground ?.width,this.BitCoinEXEBackground ?.height,window.innerWidth,window.innerHeight);
-        this.C_BitcoinEXE ?.setScale(sizeB.scale/2);
+        let sizeCB = getResponsiveSize(this.BitCoinEXEBackground ?.width,this.BitCoinEXEBackground ?.height,window.innerWidth,window.innerHeight);
+        this.C_BitcoinEXE ?.setScale(sizeCB.scale/2);
+
+        let sizeCU = getResponsiveSize(this.UpdateEXEBackground ?.width,this.UpdateEXEBackground ?.height,window.innerWidth);
     }
 
     //Setzt die Position neu anhand der Bildschirmposition

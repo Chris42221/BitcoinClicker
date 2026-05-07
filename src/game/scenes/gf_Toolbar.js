@@ -106,5 +106,22 @@ export function __BitcoinEXE__(scene) {
 }
 
 export function __UpgradeEXE__(scene) {
-    
+    scene.ToolbarUpgrades.on("pointerdown", () => {
+        if(scene.C_UpgradeEXE === null){
+            console.log("Upgrade.exe");
+            scene.UpdateEXEBackground = scene.add.image(0,0,"BitCoinEXEBackground");
+
+            scene.C_BitcoinEXE = scene.add.container(
+                scene.scale.width / 2,
+                scene.scale.height / 2
+            );
+
+            scene.C_BitcoinEXE.addAt(scene.UpdateEXEBackground, 0);
+
+        }else{
+            scene.C_UpgradeEXE.destroy();
+            scene.UpdateEXEBackground = null;
+            scene.C_UpgradeEXE = null;
+        }
+    })
 }
