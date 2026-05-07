@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { addToScore, GPUPrices, GPUScore } from './f_addScore';
 import { ScaleFaktor, getResponsiveSize } from './f_update';
+import { __BitcoinEXE__, __UpgradeEXE__ } from './gf_Toolbar';
 
 export default class MainGame extends Scene {
 
@@ -16,6 +17,7 @@ export default class MainGame extends Scene {
 
     //Tollbar
     ToolbarCoin;
+    ToolbarUpgrades;
 
     //Container
     C_BitcoinEXE = null;
@@ -167,11 +169,11 @@ export default class MainGame extends Scene {
         this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), default");
 
         //Laden der Texte Bilder
-        this.background = this.add.image(/*this.game.config.width/2,this.game.config.height/2,*/  W*0.5,H*0.5,"GameBackground").setDisplaySize(window.innerWidth,window.innerHeight);
+        this.background = this.add.image(W*0.5,H*0.5,"GameBackground").setDisplaySize(window.innerWidth,window.innerHeight);
 
+        this.ToolbarCoin = this.add.image(W*0.21,H*0.9777,"coin");
 
-
-        this.ToolbarCoin = this.add.image(W * 0.2,H * 0.9777,"");
+        this.ToolbarUpgrades = this.add.image(W*0.235,H*0.9777,"");
 
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
         this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
@@ -206,87 +208,8 @@ export default class MainGame extends Scene {
         });
 
         //Überprüft ob ein Game Objekt was eine Funktion hat angelickt wurde
-        this.ToolbarCoin.on("pointerdown", () =>{
-            if(this.C_BitcoinEXE === null){
-                console.log("Bitcoin.exe");
-                this.BitCoinEXEBackground = this.add.image(0,0,"BitCoinEXEBackground");
-                this.coin = this.add.image(0, 75, "coin");
-                this.scoreboard = this.add.text(-10,-200,this.score,{ fontFamily: '"Tiny5"', fontSize: 64, color: '#ffffff' });
-
-                this.C_BitcoinEXE = this.add.container(this.game.config.width/2,this.game.config.height/2);
-                this.C_BitcoinEXE.addAt(this.BitCoinEXEBackground,0);
-                this.C_BitcoinEXE.addAt(this.coin,1);
-                this.C_BitcoinEXE.addAt(this.scoreboard,1);
-
-                this.coin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer",});
-
-                this.coin.on('pointerdown', () => {
-                    this.score = addToScore(this.score,1);
-                    this.scoreboard.setText(Math.round(this.score));
-                    
-                    this.sound.play("CoinClickSound");
-            });
-
-            this.C_BitcoinEXE.setInteractive({
-                hitArea:{},
-                hitAreaCallback: (area, x, y,) => {
-                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-350,-300,610,50),x,y)){
-                        this.activeZone = "drag";
-                        return true;
-                    }
-                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(300,-290,40,40),x,y)){
-                        this.activeZone = "close";
-                        return true;
-                    }
-                    if(Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(250,-290,40,40),x,y)){
-                        this.activeZone = "help";
-                        return true;
-                    }
-                    this.activeZone = null;
-                    return false;
-            },
-                cursor: "url(assets/cursors/harrow.cur), pointer",
-                draggable: true,
-            });
-
-
-            this.C_BitcoinEXE.on("dragstart",() => {
-                if(this.activeZone === "drag"){
-                    this.input.setDefaultCursor("url(assets/cursors/hnesw.cur), pointer");
-                }
-            })
-            this.C_BitcoinEXE.on("drag", (pointer, dragX, dragY) => {
-                if(this.activeZone === "drag"){
-                    this.C_BitcoinEXE.x = dragX;
-                    this.C_BitcoinEXE.y = dragY;
-                }
-            })
-            this.C_BitcoinEXE.on("dragend",() => {
-                this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), pointer");
-            })
-
-            this.C_BitcoinEXE.on("pointerdown", () => {
-                switch(this.activeZone){
-                    case "close":
-                        this.C_BitcoinEXE.destroy();
-                        this.BitCoinEXEBackground = null;
-                        this.coin = null;
-                        this.scoreboard = null;
-                        this.C_BitcoinEXE = null;
-                    case "help":
-                        //Help Screen   
-                        console.log("Help");
-                }
-            })
-            }else{
-                this.C_BitcoinEXE.destroy();
-                this.BitCoinEXEBackground = null;
-                this.coin = null;
-                this.scoreboard = null;
-                this.C_BitcoinEXE = null;
-                console.log("cloes");
-            }
-        });
+        __BitcoinEXE__(this);
+        __UpgradeEXE__(this);
 
         this.GPU1.on("pointerdown", ()=>{
             if (this.score >= this.GPU1Stats.prices){
@@ -449,20 +372,6 @@ export default class MainGame extends Scene {
             }
         })
 
-
-
-
-
-
-        //Überprüft ob über etwas gehovert wurde
-        /*this.GPU1.on("pointerover", (pointer)=>{
-            let contentText = `Amount: ${this.GPU1Stats.amount} </br> Prices: ${this.GPU1Stats.prices} <br> Production: ${this.GPU1Stats.production}`;
-            text = scene.add.dom(pointer.x, pointer.y, 'div', 'background-color: rgba(0, 0, 0, 0.5); width: 220px; height: 100px; font: 16px Arial; color: #fff; display: none', 'Phaser');
-        });
-        this.GPU1.on("pointerout", ()=>{
-            thtext.destroy();
-        });*/
-
         //Intervall in dem das Spiel den Punktestand (Bitcoin Stand) updatet anhand der gekauften Grafikkarten
         setInterval(() => this.UpdateTheScoreOfBitcoin(), 100);
     }
@@ -506,25 +415,27 @@ export default class MainGame extends Scene {
 
     update(){
 
+        //Skaliert die Objekte neu anhand der Bildschirmposition
         let SizeTBC = getResponsiveSize(this.ToolbarCoin.width,this.ToolbarCoin.height,window.innerWidth,innerHeight);
         this.ToolbarCoin = this.ToolbarCoin.setScale(SizeTBC.scale/27);
-        console.log(SizeTBC.scale);
+
+        let SizeTBU = getResponsiveSize(this.ToolbarUpgrades.width,this.ToolbarCoin.height,window.innerWidth,window.innerHeight);
+        this.ToolbarUpgrades = this.ToolbarUpgrades.setScale(SizeTBU.scale/2.5);
+        console.log(SizeTBU.scale)
   
         let sizeB = getResponsiveSize(this.BitCoinEXEBackground ?.width,this.BitCoinEXEBackground ?.height,window.innerWidth,window.innerHeight);
-
         this.C_BitcoinEXE ?.setScale(sizeB.scale/2);
     }
 
+    //Setzt die Position neu anhand der Bildschirmposition
     onResize(gameSize) {
         const W = gameSize.width;
         const H = gameSize.height;
 
-        this.background ?.setPosition(W*.5, H*.5).setDisplaySize(W, H);
+        this.background ?.setPosition(W*0.5, H*0.5).setDisplaySize(W, H);
 
-        this.ToolbarCoin ?.setPosition(W * 0.2,H * 0.9777);
-
-        if(this.C_BitcoinEXE != null){
-        }
+        this.ToolbarCoin ?.setPosition(W*0.21,H*0.9777);
+        this.ToolbarUpgrades ?.setPosition(W*0.235,H*0.9777);
     }
 }
 
