@@ -175,7 +175,7 @@ export default class MainGame extends Scene {
         //Laden der Bilder
         this.load.image("GameBackground","GameBackground.png");
         this.load.image("coin","coin.png");
-        this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png")
+        this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png");
 
         //Laden der Sounds
         this.load.audio("CoinClickSound","CoinClickSound.mp3");
@@ -184,6 +184,7 @@ export default class MainGame extends Scene {
         //Laden der JSON
         this.load.json('gpuData', 'GPU.json');
 
+        
         this.load.once("complete", () => {
             this.arrGPU = this.cache.json.get('gpuData');
             console.log(this.arrGPU);
@@ -193,17 +194,15 @@ export default class MainGame extends Scene {
                 this.arrGPUStats[i] = this.arrGPU[i];
                 console.log(this.arrGPUStats[i]);
 
-                this.load.image()
-
+                this.load.image(`GPU${i}`,this.arrGPUStats[i].gpu_img);
                 i++;
             });
         })
 
+        this.load.start();
     }
 
     create() {
-
-
 
         // Hauptspiellogik hier
 
