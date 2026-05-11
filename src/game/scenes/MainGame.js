@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { addToScore, GPUPrices, GPUScore } from './f_addScore';
 import { ScaleFaktor, getResponsiveSize } from './f_update';
 import { __BitcoinEXE__, __UpgradeEXE__ } from './gf_Toolbar';
+import { fetchData } from './f_fetch';
 
 export default class MainGame extends Scene {
 
@@ -16,6 +17,9 @@ export default class MainGame extends Scene {
 
     score = 0;
     scoreboard;
+
+    //Json
+    arrGPU = [];
 
     //Tollbar
     ToolbarCoin;
@@ -36,6 +40,19 @@ export default class MainGame extends Scene {
     GPU8;
     GPU9;
     GPU10;
+
+    arrGPUStats = {
+        arrGPU0Stats: [],
+        arrGPU1Stats: [],
+        arrGPU2Stats: [],
+        arrGPU3Stats: [],
+        arrGPU4Stats: [],
+        arrGPU5Stats: [],
+        arrGPU6Stats: [],
+        arrGPU7Stats: [],
+        arrGPU8Stats: [],
+        arrGPU9Stats: [],
+    }
 
     /*
     //Grafikkarten Stats
@@ -152,8 +169,6 @@ export default class MainGame extends Scene {
 
     preload() {
         // Ressourcen laden
-        //
-
         //Laden der Pfade
         this.load.setPath('assets');
 
@@ -165,9 +180,31 @@ export default class MainGame extends Scene {
         //Laden der Sounds
         this.load.audio("CoinClickSound","CoinClickSound.mp3");
         this.load.audio("DeclineSound","DeclineSound.mp3");
+
+        //Laden der JSON
+        this.load.json('gpuData', 'GPU.json');
+
+        this.load.once("complete", () => {
+            this.arrGPU = this.cache.json.get('gpuData');
+            console.log(this.arrGPU);
+
+
+            this.arrGPU.forEach(( GPUStats,i) => {
+                this.arrGPUStats[i] = this.arrGPU[i];
+                console.log(this.arrGPUStats[i]);
+
+                this.load.image()
+
+                i++;
+            });
+        })
+
     }
 
     create() {
+
+
+
         // Hauptspiellogik hier
 
         const W = this.scale.width;
