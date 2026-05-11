@@ -37,6 +37,7 @@ export default class MainGame extends Scene {
     GPU9;
     GPU10;
 
+    /*
     //Grafikkarten Stats
     GPU1Stats = {
         status: false,
@@ -118,6 +119,7 @@ export default class MainGame extends Scene {
         prices: 10000000,
         production: 2000000
     };
+    */
 
     constructor() {
         super('MainGame');
@@ -150,6 +152,8 @@ export default class MainGame extends Scene {
 
     preload() {
         // Ressourcen laden
+        //
+
         //Laden der Pfade
         this.load.setPath('assets');
 
@@ -178,6 +182,7 @@ export default class MainGame extends Scene {
 
         this.ToolbarUpgrades = this.add.image(W*0.235,H*0.9777,"");
 
+        /*
         this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
         this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
         this.GPU3 = this.add.text(100,300,"GPU3",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
@@ -188,11 +193,13 @@ export default class MainGame extends Scene {
         this.GPU8 = this.add.text(100,550,"GPU8",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
         this.GPU9 = this.add.text(100,600,"GPU9",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
         this.GPU10 = this.add.text(100,650,"GPU10",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
+        */
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
         this.ToolbarUpgrades.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
 
+        /*
         this.GPU1.setInteractive();
         this.GPU2.setInteractive();
         this.GPU3.setInteractive();
@@ -203,6 +210,7 @@ export default class MainGame extends Scene {
         this.GPU8.setInteractive();
         this.GPU9.setInteractive();
         this.GPU10.setInteractive();
+        */
 
         //Reagiert wenn die Größe sich verändert
         this.scale.on('resize', this.onResize, this);
@@ -215,6 +223,7 @@ export default class MainGame extends Scene {
         __BitcoinEXE__(this);
         __UpgradeEXE__(this);
 
+        /*
         this.GPU1.on("pointerdown", ()=>{
             if (this.score >= this.GPU1Stats.prices){
                 console.log("GPU1");
@@ -375,12 +384,14 @@ export default class MainGame extends Scene {
                 this.sound.play("DeclineSound");
             }
         })
+            */
 
         //Intervall in dem das Spiel den Punktestand (Bitcoin Stand) updatet anhand der gekauften Grafikkarten
         setInterval(() => this.UpdateTheScoreOfBitcoin(), 100);
     }
     
     UpdateTheScoreOfBitcoin(){
+        /*
         if(this.GPU1Stats.status == true){
             this.score = GPUScore(this.score,this.GPU1Stats.production,this.GPU1Stats.amount);
         }
@@ -415,6 +426,7 @@ export default class MainGame extends Scene {
         if(this.scoreboard != null){
             this.scoreboard.setText(Math.round(this.score));
         }
+            */
     }
 
     update(){
