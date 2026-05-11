@@ -1,10 +1,12 @@
 export async function fetchData(url) {
     const DataReq = await fetch(url);
     if(!DataReq.ok){
-        return(console.log("Error"));
+        console.log("Error");
+        return(null);
     }
     
-    const Data = DataReq.json();
+    const Data = await DataReq.json();
+    console.log(Data);
 
-    return(console.log(Data));
+    return(Data);
 }
