@@ -2,7 +2,6 @@ import { Scene } from 'phaser';
 import { addToScore, GPUPrices, GPUScore } from './f_addScore';
 import { ScaleFaktor, getResponsiveSize } from './f_update';
 import { __BitcoinEXE__, __UpgradeEXE__ } from './gf_Toolbar';
-import { fetchData } from './f_fetch';
 
 export default class MainGame extends Scene {
 
@@ -30,6 +29,7 @@ export default class MainGame extends Scene {
     C_UpgradeEXE = null;
 
     //Grafikkarten
+    GPU0;
     GPU1;
     GPU2;
     GPU3;
@@ -39,7 +39,6 @@ export default class MainGame extends Scene {
     GPU7;
     GPU8;
     GPU9;
-    GPU10;
 
     arrGPUStats = {
         arrGPU0Stats: [],
@@ -175,7 +174,9 @@ export default class MainGame extends Scene {
         //Laden der Bilder
         this.load.image("GameBackground","GameBackground.png");
         this.load.image("coin","coin.png");
-        this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png")
+        this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png");
+
+
 
         //Laden der Sounds
         this.load.audio("CoinClickSound","CoinClickSound.mp3");
@@ -184,26 +185,35 @@ export default class MainGame extends Scene {
         //Laden der JSON
         this.load.json('gpuData', 'GPU.json');
 
+        
         this.load.once("complete", () => {
             this.arrGPU = this.cache.json.get('gpuData');
             console.log(this.arrGPU);
 
 
-            this.arrGPU.forEach(( GPUStats,i) => {
-                this.arrGPUStats[i] = this.arrGPU[i];
-                console.log(this.arrGPUStats[i]);
+                this.arrGPU.forEach(( GPUStats,i) => {
+                    this.arrGPUStats[`arrGPU${i}Stats`] = this.arrGPU[i];
 
-                this.load.image()
+                    this.load.image(`GPU${i}`,this.arrGPUStats[`arrGPU${i}Stats`].gpu_img);
+                });
 
-                i++;
+                this.load.once('complete', () => {
+                this.arrGPU.forEach((GPUStats, i) => {
+                    console.log(this.textures.exists(`GPU${i}`));
+
+                    this[`GPU${i}`] = this.add.image(0, 0, `GPU${i}`).setVisible(false);
+                });
+
             });
-        })
 
+            this.load.start();
+        });
+
+        this.load.start();
     }
 
     create() {
-
-
+        console.log(this.textures.list);
 
         // Hauptspiellogik hier
 
@@ -218,19 +228,6 @@ export default class MainGame extends Scene {
         this.ToolbarCoin = this.add.image(W*0.21,H*0.9777,"coin");
 
         this.ToolbarUpgrades = this.add.image(W*0.235,H*0.9777,"");
-
-        /*
-        this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
-        this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU3 = this.add.text(100,300,"GPU3",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU4 = this.add.text(100,350,"GPU4",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU5 = this.add.text(100,400,"GPU5",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU6 = this.add.text(100,450,"GPU6",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU7 = this.add.text(100,500,"GPU7",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU8 = this.add.text(100,550,"GPU8",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU9 = this.add.text(100,600,"GPU9",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU10 = this.add.text(100,650,"GPU10",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        */
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
