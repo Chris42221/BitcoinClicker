@@ -9,7 +9,8 @@ export default class MainMenu extends Scene {
     }
 
     preload(){
-
+        this.load.image("loginBackground","public/assets/loginBackground.png");
+        this.load.image("loginwindow","public/assets/login_fenster.png");
     }
 
     input(){
@@ -20,7 +21,18 @@ export default class MainMenu extends Scene {
 
         console.log('MainMenu create called');
 
-        this.MainMenu = this.add.text(this.scale.width / 2, 300, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' }).setOrigin(0.5);
+        // Hintergrund hinzufügen und auf Bildschirmgröße skalieren
+        const bg = this.add.image(this.scale.width / 2, this.scale.height / 2, 'loginBackground')
+            .setOrigin(0.499, 0.5)
+            .setDisplaySize(this.scale.width, this.scale.height);
+
+        const loginWindow = this.add.image(this.scale.width / 3, this.scale.height / 2, 'loginwindow')
+            .setOrigin(0.5, 0.5)
+            .setDisplaySize(this.scale.width * 0.3, this.scale.height * 0.7);
+
+        console.log('MainMenu create called');
+
+        //this.MainMenu = this.add.text(this.scale.width / 2, 300, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' }).setOrigin(0.5);
 
         this.MainMenu.setInteractive();
 
@@ -31,7 +43,7 @@ export default class MainMenu extends Scene {
 
 
 
-        this.usernamebutton = this.add.text(this.scale.width / 2,500,"usernamebutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
+        //this.usernamebutton = this.add.text(this.scale.width / 2,500,"usernamebutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
         this.usernamebutton.setInteractive();
         this.usernamebutton.on('pointerdown', () => {
             usernameeingabe = true;
@@ -39,7 +51,7 @@ export default class MainMenu extends Scene {
             console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
         });
         
-        this.passwordbutton = this.add.text(this.scale.width / 2,800,"passwordbutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
+        //this.passwordbutton = this.add.text(this.scale.width / 2,800,"passwordbutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
         this.passwordbutton.setInteractive();
         this.passwordbutton.on('pointerdown', () => {
             passwordeingabe = true;
