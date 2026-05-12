@@ -191,27 +191,29 @@ export default class MainGame extends Scene {
             console.log(this.arrGPU);
 
 
-            this.arrGPU.forEach(( GPUStats,i) => {
-                this.arrGPUStats[`arrGPU${i}Stats`] = this.arrGPU[i];
-                console.log(this.arrGPUStats[i]);
+                this.arrGPU.forEach(( GPUStats,i) => {
+                    this.arrGPUStats[`arrGPU${i}Stats`] = this.arrGPU[i];
 
-                this.load.image(`GPU${i}`,this.arrGPU[i].gpu_img);
+                    this.load.image(`GPU${i}`,this.arrGPUStats[`arrGPU${i}Stats`].gpu_img);
+                });
+
+                this.load.once('complete', () => {
+                this.arrGPU.forEach((GPUStats, i) => {
+                    console.log(this.textures.exists(`GPU${i}`));
+
+                    this[`GPU${i}`] = this.add.image(0, 0, `GPU${i}`).setVisible(false);
+                });
+
             });
-        })
+
+            this.load.start();
+        });
 
         this.load.start();
-
-        this.load.image("GPU1",this.arrGPUStats.arrGPU0Stats.gpu_img);
     }
 
     create() {
-        console.log(this.arrGPUStats.arrGPU0Stats.gpu_img);
         console.log(this.textures.list);
-
-        this.arrGPU.forEach((gpu, i) => {
-            console.log(this.textures.exists(`GPU${i}`));  // ✓ prüfen ob geladen
-            this.add.image(0, 0, `GPU${i}`);
-        });
 
         // Hauptspiellogik hier
 
@@ -226,19 +228,6 @@ export default class MainGame extends Scene {
         this.ToolbarCoin = this.add.image(W*0.21,H*0.9777,"coin");
 
         this.ToolbarUpgrades = this.add.image(W*0.235,H*0.9777,"");
-
-        /*
-        this.GPU1 = this.add.text(100,200,'GPU1',{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00' });
-        this.GPU2 = this.add.text(100,250,"GPU2",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU3 = this.add.text(100,300,"GPU3",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU4 = this.add.text(100,350,"GPU4",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU5 = this.add.text(100,400,"GPU5",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU6 = this.add.text(100,450,"GPU6",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU7 = this.add.text(100,500,"GPU7",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU8 = this.add.text(100,550,"GPU8",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU9 = this.add.text(100,600,"GPU9",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        this.GPU10 = this.add.text(100,650,"GPU10",{fontFamily: 'Arial', fontSize: 32, color: '#00ff00'});
-        */
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});

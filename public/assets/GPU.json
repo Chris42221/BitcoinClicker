@@ -42,7 +42,7 @@
     "name": "GPU5",
     "prices": 100000,
     "production": 3000,
-    "gpu_img": "gpu/grafikkarte_5_gold.png"
+    "gpu_img": "gpu/grafikkarte_5_lila.png"
   },
   {
     "status": false,
@@ -87,6 +87,6 @@
     "name": "GPU10",
     "prices": 10000000,
     "production": 2000000,
-    "gpu_img": "gpu/grafikkarte_9_neon.png"
+    "gpu_img": "gpu/grafikkarte_10_nyan.png"
   }
 ]
