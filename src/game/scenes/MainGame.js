@@ -2,7 +2,6 @@ import { Scene } from 'phaser';
 import { addToScore, GPUPrices, GPUScore } from './f_addScore';
 import { ScaleFaktor, getResponsiveSize } from './f_update';
 import { __BitcoinEXE__, __UpgradeEXE__ } from './gf_Toolbar';
-import { fetchData } from './f_fetch';
 
 export default class MainGame extends Scene {
 
@@ -30,6 +29,7 @@ export default class MainGame extends Scene {
     C_UpgradeEXE = null;
 
     //Grafikkarten
+    GPU0;
     GPU1;
     GPU2;
     GPU3;
@@ -39,7 +39,6 @@ export default class MainGame extends Scene {
     GPU7;
     GPU8;
     GPU9;
-    GPU10;
 
     arrGPUStats = {
         arrGPU0Stats: [],
@@ -177,6 +176,8 @@ export default class MainGame extends Scene {
         this.load.image("coin","coin.png");
         this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png");
 
+
+
         //Laden der Sounds
         this.load.audio("CoinClickSound","CoinClickSound.mp3");
         this.load.audio("DeclineSound","DeclineSound.mp3");
@@ -191,18 +192,26 @@ export default class MainGame extends Scene {
 
 
             this.arrGPU.forEach(( GPUStats,i) => {
-                this.arrGPUStats[i] = this.arrGPU[i];
+                this.arrGPUStats[`arrGPU${i}Stats`] = this.arrGPU[i];
                 console.log(this.arrGPUStats[i]);
 
-                this.load.image(`GPU${i}`,this.arrGPUStats[i].gpu_img);
-                i++;
+                this.load.image(`GPU${i}`,this.arrGPU[i].gpu_img);
             });
         })
 
         this.load.start();
+
+        this.load.image("GPU1",this.arrGPUStats.arrGPU0Stats.gpu_img);
     }
 
     create() {
+        console.log(this.arrGPUStats.arrGPU0Stats.gpu_img);
+        console.log(this.textures.list);
+
+        this.arrGPU.forEach((gpu, i) => {
+            console.log(this.textures.exists(`GPU${i}`));  // ✓ prüfen ob geladen
+            this.add.image(0, 0, `GPU${i}`);
+        });
 
         // Hauptspiellogik hier
 
