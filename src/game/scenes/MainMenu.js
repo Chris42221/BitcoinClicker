@@ -14,8 +14,8 @@ export default class MainMenu extends Scene {
     }
 
     preload(){
-        this.load.image("loginBackground","public/assets/loginBackground.png");
-        this.load.image("loginwindow","public/assets/login_fenster.png");
+        this.load.image("loginBackground","assets/loginBackground.png");
+        this.load.image("loginwindow","assets/login_fenster.png");
     }
 
     input(){
