@@ -1,9 +1,14 @@
 import { Scene } from "phaser";
+import { getResponsiveSize } from "./f_update";
 
 export default class MainMenu extends Scene {
 
     text;
     start = null;
+
+    bg;
+    loginWindow;
+
     constructor() {
         super('mainmenu');
     }
@@ -19,22 +24,21 @@ export default class MainMenu extends Scene {
 
     create() {
 
+        const W = this.scale.width;
+        const H = this.scale.height;
+
         console.log('MainMenu create called');
 
         // Hintergrund hinzufügen und auf Bildschirmgröße skalieren
-        const bg = this.add.image(this.scale.width / 2, this.scale.height / 2, 'loginBackground')
-            .setOrigin(0.499, 0.5)
-            .setDisplaySize(this.scale.width, this.scale.height);
+        this.bg = this.add.image(W*0.5, H*0.5, 'loginBackground').setDisplaySize(window.innerWidth,window.innerHeight);
 
-        const loginWindow = this.add.image(this.scale.width / 3, this.scale.height / 2, 'loginwindow')
-            .setOrigin(0.5, 0.5)
-            .setDisplaySize(this.scale.width * 0.3, this.scale.height * 0.7);
+        this.loginWindow = this.add.image(W*0.3333333333, H*0.5, 'loginwindow')
 
         console.log('MainMenu create called');
 
-        //this.MainMenu = this.add.text(this.scale.width / 2, 300, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' }).setOrigin(0.5);
+        this.MainMenu = this.add.text(this.scale.width / 2, 300, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' }).setOrigin(0.5);
 
-        this.MainMenu.setInteractive();
+       this.MainMenu.setInteractive();
 
         let username = "";
         let password = "";
@@ -43,22 +47,36 @@ export default class MainMenu extends Scene {
 
 
 
-        //this.usernamebutton = this.add.text(this.scale.width / 2,500,"usernamebutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
-        this.usernamebutton.setInteractive();
-        this.usernamebutton.on('pointerdown', () => {
+        this.usernamebutton = this.add.container(this.scale.width / 2, 500);
+
+        const uwWidth = 300;
+        const uwHeight = 50;
+        // unsichtbare Zone als interaktives Kind (kein sichtbarer Text)
+        const invisibleZone1 = this.add.zone(0, 0, uwWidth, uwHeight).setOrigin(0.5);
+        this.usernamebutton.add(invisibleZone1);
+
+        invisibleZone1.setInteractive();
+        invisibleZone1.on('pointerdown', () => {
             usernameeingabe = true;
             passwordeingabe = false;
             console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
         });
-        
-        //this.passwordbutton = this.add.text(this.scale.width / 2,800,"passwordbutton",{ fontFamily: 'Arial', fontSize: 32, color: '#00ff00', })
-        this.passwordbutton.setInteractive();
-        this.passwordbutton.on('pointerdown', () => {
+
+
+this.passwordbutton = this.add.container(this.scale.width / 2, 600);
+
+        const pwWidth = 300;
+        const pwHeight = 50;
+        // unsichtbare Zone als interaktives Kind (kein sichtbarer Text)
+        const invisibleZone = this.add.zone(0, 0, pwWidth, pwHeight).setOrigin(0.5);
+        this.passwordbutton.add(invisibleZone);
+        // setInteractive auf die lokale Variable anwenden (nicht this.invisibleZone)
+        invisibleZone.setInteractive();
+        invisibleZone.on('pointerdown', () => {
             passwordeingabe = true;
             usernameeingabe = false;
             console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
-        });
-
+       });
 
 
 
@@ -95,16 +113,33 @@ this.input.keyboard.on("keydown", (event) => {
                 console.log('MainMenu clicked - invalid credentials');
             }
         });
+        
 
+        //Reagiert wenn die Größe sich verändert
+        this.scale.on('resize', this.onResize, this);
+
+        this.events.on('shutdown', () => {
+            this.scale.off('resize', this.onResize, this);
+        });
 
 
     }
 
     update(){
-
-
-
-
-    };
+ 
+        //Skaliert die Objekte neu anhand der Bildschirmposition
+        let SizeLogin = getResponsiveSize(this.loginWindow.width,this.loginWindow.height,window.innerWidth,innerHeight);
+        this.loginWindow = this.loginWindow.setScale(SizeLogin.scale/1.5);
+     }
+ 
+     //Setzt die Position neu anhand der Bildschirmposition
+     onResize(gameSize) {
+         const W = gameSize.width;
+         const H = gameSize.height;
+ 
+         this.bg ?.setPosition(W*0.5, H*0.5).setDisplaySize(W, H);
+ 
+         this.loginWindow ?.setPosition(W*0.3333333333,H*0.5);
+     }
 }
 
