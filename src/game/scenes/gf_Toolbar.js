@@ -178,6 +178,7 @@ export function __UpgradeEXE__(scene) {
                     case "close":
                         scene.arrGPU.forEach((GPU,i) => {
                             scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
+                            scene[`GPU${i}`].removeInteractive();
                             scene[`GPU${i}`].setVisible(false);
                         });
                         scene.C_UpgradeEXE.destroy();
@@ -242,6 +243,7 @@ export function __UpgradeEXE__(scene) {
         }else{
             scene.arrGPU.forEach((GPU,i) => {
                 scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
+                scene[`GPU${i}`].removeInteractive();
                 scene[`GPU${i}`].setVisible(false);
             });
             scene.C_UpgradeEXE.destroy();
