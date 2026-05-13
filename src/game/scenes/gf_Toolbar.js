@@ -119,6 +119,17 @@ export function __UpgradeEXE__(scene) {
 
             scene.C_UpgradeEXE.addAt(scene.UpdateEXEBackground, 0);
 
+            let Poy = -200;
+            scene.arrGPU.forEach((GPU,i) => {
+                scene[`GPU${i}`].setScale(0.2);
+                scene.C_UpgradeEXE.addAt(scene[`GPU${i}`],1);
+                scene[`GPU${i}`].setVisible(true);
+
+                scene[`GPU${i}`].y = Poy;
+                
+                Poy += 100;
+            });
+
               scene.C_UpgradeEXE.setInteractive({
                 hitArea: {},
                 hitAreaCallback: (area, x, y) => {
@@ -165,6 +176,10 @@ export function __UpgradeEXE__(scene) {
             scene.C_UpgradeEXE.on("pointerdown", () => {
                 switch (scene.activeZone) {
                     case "close":
+                        scene.arrGPU.forEach((GPU,i) => {
+                            scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
+                            scene[`GPU${i}`].setVisible(false);
+                        });
                         scene.C_UpgradeEXE.destroy();
                         scene.UpdateEXEBackground = null;
                         scene.C_UpgradeEXE = null;
@@ -183,11 +198,23 @@ export function __UpgradeEXE__(scene) {
 
             scene.C_UpgradeEXE.on("wheel",(pointer, deltaX, deltaY, deltaZ, event) => {
                 if(scene.activeZone === "scroll"){
-                    
+                    scene.arrGPU.forEach((GPU,i) => {
+                        scene[`GPU${i}`].setScale(0.2);
+                        scene.C_UpgradeEXE.addAt(scene[`GPU${i}`],1);
+                        scene[`GPU${i}`].setVisible(true);
+
+                        scene[`GPU${i}`].y = Poy;
+                        
+                        Poy += 100;
+                    });
                 }
             })
 
         }else{
+            scene.arrGPU.forEach((GPU,i) => {
+                scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
+                scene[`GPU${i}`].setVisible(false);
+            });
             scene.C_UpgradeEXE.destroy();
             scene.UpdateEXEBackground = null;
             scene.C_UpgradeEXE = null;
