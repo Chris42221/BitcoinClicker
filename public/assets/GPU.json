@@ -4,7 +4,7 @@
     "amount": 0,
     "level": 1,
     "name": "GPU1",
-    "prices": 10,
+    "prices": 15,
     "production": 1,
     "gpu_img": "gpu/grafikkarte_1_alt.png"
   },
@@ -14,7 +14,7 @@
     "level": 2,
     "name": "GPU2",
     "prices": 100,
-    "production": 10,
+    "production": 5,
     "gpu_img": "gpu/grafikkarte_2_dirt.png"
   },
   {
@@ -23,7 +23,7 @@
     "level": 3,
     "name": "GPU3",
     "prices": 1000,
-    "production": 80,
+    "production": 50,
     "gpu_img": "gpu/grafikkarte_3_iron.png"
   },
   {
@@ -32,7 +32,7 @@
     "level": 4,
     "name": "GPU4",
     "prices": 10000,
-    "production": 500,
+    "production": 200,
     "gpu_img": "gpu/grafikkarte_4_gold.png"
   },
   {

@@ -12,6 +12,6 @@ export function GPUScore(score,BTCsec,amount){
 
 export function GPUPrices(prices){
     let ReturnPrices;
-    ReturnPrices = Math.round(prices*Math.sqrt(2));
+    ReturnPrices = Math.round(prices*1.15);
     return ReturnPrices;
 }

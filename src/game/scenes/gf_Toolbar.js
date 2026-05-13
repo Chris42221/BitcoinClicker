@@ -119,6 +119,17 @@ export function __UpgradeEXE__(scene) {
 
             scene.C_UpgradeEXE.addAt(scene.UpdateEXEBackground, 0);
 
+            let Poy = -200;
+            scene.arrGPU.forEach((GPU,i) => {
+                scene[`GPU${i}`].setScale(0.2);
+                scene.C_UpgradeEXE.addAt(scene[`GPU${i}`],1);
+                scene[`GPU${i}`].setVisible(true);
+
+                scene[`GPU${i}`].y = Poy;
+                
+                Poy += 100;
+            });
+
               scene.C_UpgradeEXE.setInteractive({
                 hitArea: {},
                 hitAreaCallback: (area, x, y) => {
@@ -165,6 +176,11 @@ export function __UpgradeEXE__(scene) {
             scene.C_UpgradeEXE.on("pointerdown", () => {
                 switch (scene.activeZone) {
                     case "close":
+                        scene.arrGPU.forEach((GPU,i) => {
+                            scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
+                            scene[`GPU${i}`].removeInteractive();
+                            scene[`GPU${i}`].setVisible(false);
+                        });
                         scene.C_UpgradeEXE.destroy();
                         scene.UpdateEXEBackground = null;
                         scene.C_UpgradeEXE = null;
@@ -181,13 +197,55 @@ export function __UpgradeEXE__(scene) {
                 }
             })
 
+            let Progress = 10;
             scene.C_UpgradeEXE.on("wheel",(pointer, deltaX, deltaY, deltaZ, event) => {
                 if(scene.activeZone === "scroll"){
-                    
+                    if(deltaY < 0 && Progress < 10){
+                        scene.arrGPU.forEach((GPU,i) => {
+                            console.log(Progress);
+
+                            scene[`GPU${i}`].y += 50;
+                            Progress += 5
+                        });
+                    }else if(deltaY > 0 && Progress > -450){
+                        console.log(Progress);
+
+                        scene.arrGPU.forEach((GPU,i) => {
+                            scene[`GPU${i}`].y -=  50;
+                            Progress -= 5
+                        });
+                    }
                 }
             })
 
+            //Aktivieren vom Interaktiv bei den GPUs
+            scene.arrGPU.forEach((GPU,i) => {
+                scene[`GPU${i}`].setInteractive();
+
+                scene[`GPU${i}`].on("pointerdown", () => {
+                    if (scene.score >= scene.arrGPUStats[`arrGPU${i}Stats`].prices){
+                        console.log("GPU1");
+
+                        scene.score -=  scene.arrGPUStats[`arrGPU${i}Stats`].prices;
+
+                        scene.arrGPUStats[`arrGPU${i}Stats`].prices = GPUPrices(scene.arrGPUStats[`arrGPU${i}Stats`].prices);
+                        
+                        scene.scoreboard.setText(Math.round(scene.score));
+
+                        scene.arrGPUStats[`arrGPU${i}Stats`].status = true;
+                        scene.arrGPUStats[`arrGPU${i}Stats`].amount++;
+                    }else{
+                        scene.sound.play("DeclineSound");
+                    }
+                });
+            });
+
         }else{
+            scene.arrGPU.forEach((GPU,i) => {
+                scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
+                scene[`GPU${i}`].removeInteractive();
+                scene[`GPU${i}`].setVisible(false);
+            });
             scene.C_UpgradeEXE.destroy();
             scene.UpdateEXEBackground = null;
             scene.C_UpgradeEXE = null;
