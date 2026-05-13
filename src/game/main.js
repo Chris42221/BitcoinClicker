@@ -15,6 +15,9 @@ const config = {
     mode: Phaser.Scale.RESIZE,         // Canvas = immer Browsergröße
     autoCenter: Phaser.Scale.CENTER_BOTH, // Automatisch zentrieren
   },
+  physics: {
+    default: 'arcade'
+  },
 
   scene: [MainMenu, MainGame]
 }; 
