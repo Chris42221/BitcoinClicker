@@ -27,16 +27,13 @@ export default class MainMenu extends Scene {
         const W = this.scale.width;
         const H = this.scale.height;
 
-        console.log('MainMenu create called');
 
         // Hintergrund hinzufügen und auf Bildschirmgröße skalieren
         this.bg = this.add.image(W*0.5, H*0.5, 'loginBackground').setDisplaySize(window.innerWidth,window.innerHeight);
 
-        this.loginWindow = this.add.image(W*0.3333333333, H*0.5, 'loginwindow')
+        this.loginWindow = this.add.image(0, 0, 'loginwindow')
 
-        console.log('MainMenu create called');
-
-        this.MainMenu = this.add.text(this.scale.width / 2, 300, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' }).setOrigin(0.5);
+        this.MainMenu = this.add.text(this.scale.width / 2, 300, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#0026ff' });
 
        this.MainMenu.setInteractive();
 
@@ -45,38 +42,38 @@ export default class MainMenu extends Scene {
         let usernameeingabe;
         let passwordeingabe;
 
+        this.logincontainer = this.add.container(
+            W * 0.25,
+            H * 0.5
+        );
 
+        this.logincontainer.add(this.loginWindow,0);
 
-        this.usernamebutton = this.add.container(this.scale.width / 2, 500);
+        this.logincontainer.setInteractive({
+                hitArea: {},
+                hitAreaCallback: (area, x, y) => {
+                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-350, -300, 610, 50), x, y)) {
+                        this.activeZone = "drag";
+                        return true;
+                        usernameeingabe = true;
+                        passwordeingabe = false;
+                        console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
+                    }
+                }
+            });
 
-        const uwWidth = 300;
-        const uwHeight = 50;
-        // unsichtbare Zone als interaktives Kind (kein sichtbarer Text)
-        const invisibleZone1 = this.add.zone(0, 0, uwWidth, uwHeight).setOrigin(0.5);
-        this.usernamebutton.add(invisibleZone1);
-
-        invisibleZone1.setInteractive();
         invisibleZone1.on('pointerdown', () => {
-            usernameeingabe = true;
-            passwordeingabe = false;
-            console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
+
         });
 
 
-this.passwordbutton = this.add.container(this.scale.width / 2, 600);
 
-        const pwWidth = 300;
-        const pwHeight = 50;
-        // unsichtbare Zone als interaktives Kind (kein sichtbarer Text)
-        const invisibleZone = this.add.zone(0, 0, pwWidth, pwHeight).setOrigin(0.5);
-        this.passwordbutton.add(invisibleZone);
-        // setInteractive auf die lokale Variable anwenden (nicht this.invisibleZone)
-        invisibleZone.setInteractive();
+
         invisibleZone.on('pointerdown', () => {
             passwordeingabe = true;
             usernameeingabe = false;
             console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
-       });
+        });
 
 
 
@@ -138,8 +135,8 @@ this.input.keyboard.on("keydown", (event) => {
          const H = gameSize.height;
  
          this.bg ?.setPosition(W*0.5, H*0.5).setDisplaySize(W, H);
- 
-         this.loginWindow ?.setPosition(W*0.3333333333,H*0.5);
+
+         this.logincontainer ?.setPosition(W*0.25,H*0.5);
      }
 }
 
