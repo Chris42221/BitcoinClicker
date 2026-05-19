@@ -40,6 +40,68 @@ export default class MainGame extends Scene {
     GPU8;
     GPU9;
 
+    GPUText0;
+    GPUText1;
+    GPUText2;
+    GPUText3;
+    GPUText4;
+    GPUText5;
+    GPUText6;
+    GPUText7;
+    GPUText8;
+    GPUText9;
+
+    GPUText0Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText1Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText2Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText3Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText4Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText5Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText6Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText7Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText8Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+    GPUText9Content = {
+        GPUamount: 0,
+        GPUprices: 0,
+        GPUproduction: 0
+    };
+
     arrGPUStats = {
         arrGPU0Stats: [],
         arrGPU1Stats: [],
