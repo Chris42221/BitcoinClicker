@@ -128,14 +128,23 @@ export function __UpgradeEXE__(scene) {
                 scene[`GPU${i}`].setVisible(false);
 
                 scene[`GPU${i}`].y = Poy;
+                scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].amount;
+                scene[`GPUText${i}Content`].GPUamount = scene.arrGPUStats[`arrGPU${i}Stats`].prices;
+                scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].production;
                 
+                scene[`GPUText${i}`] = scene.add.text(100, 0,`${scene[`GPUText${i}Content`].GPUprices} | ${scene[`GPUText${i}Content`].GPUamount} | ${scene[`GPUText${i}Content`].GPUproduction}`,{ fontFamily: '"Tiny5"', fontSize: 64, color: '#ffffff' });
+                scene.C_UpgradeEXE.addAt(scene[`GPUText${i}`],1);
+                scene[`GPUText${i}`].setVisible(false);
+                scene[`GPUText${i}`].y = Poy - 39;
+
                 Poy += 100;
                 
                 scene.physics.add.existing(scene[`GPU${i}`]);
 
-                scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`], () => {
+                if(scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
                     scene[`GPU${i}`].setVisible(true);
-                });
+                    scene[`GPUText${i}`].setVisible(true);
+                }
 
             });
 
@@ -188,7 +197,7 @@ export function __UpgradeEXE__(scene) {
                         scene.arrGPU.forEach((GPU, i) => {
                             scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
                             scene[`GPU${i}`].removeInteractive();
-                            scene[`GPU${i}`].off('pointerdown'); // ✓ Listener entfernen
+                            scene[`GPU${i}`].off('pointerdown');
                             scene[`GPU${i}`].setVisible(false);
                         });
                         scene.C_UpgradeEXE.destroy();
@@ -215,28 +224,36 @@ export function __UpgradeEXE__(scene) {
                             console.log(Progress);
 
                             scene[`GPU${i}`].y += 50;
+                            scene[`GPUText${i}`].y += 50;
                             Progress += 5
+
 
                             if(scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
                                 scene[`GPU${i}`].setVisible(true);
+                                scene[`GPUText${i}`].setVisible(true);
+                            }else if(!scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
+                                scene[`GPU${i}`].setVisible(false);
+                                scene[`GPUText${i}`].setVisible(false);       
                             }
-                            if(!scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
-                                scene[`GPU${i}`].setVisible(flase);       
-                            }
+                            
                         });
                     }else if(deltaY > 0 && Progress > -450){
                         console.log(Progress);
 
                         scene.arrGPU.forEach((GPU,i) => {
                             scene[`GPU${i}`].y -=  50;
+                            scene[`GPUText${i}`].y -= 50;
                             Progress -= 5
+
 
                             if(scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
                                 scene[`GPU${i}`].setVisible(true);
+                                scene[`GPUText${i}`].setVisible(true);
+                            }else if(!scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
+                                scene[`GPU${i}`].setVisible(false); 
+                                scene[`GPUText${i}`].setVisible(false);      
                             }
-                            if(!scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
-                                scene[`GPU${i}`].setVisible(flase);       
-                            }
+
                         });
                     }
                 }
@@ -256,7 +273,13 @@ export function __UpgradeEXE__(scene) {
                         scene.arrGPUStats[`arrGPU${i}Stats`].amount++;
 
                         scene.arrGPUStats[`arrGPU${i}Stats`].prices = GPUPrices(scene.arrGPUStats[`arrGPU${i}Stats`].prices);
-                        
+
+                        scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].amount;
+                        scene[`GPUText${i}Content`].GPUamount = scene.arrGPUStats[`arrGPU${i}Stats`].prices;
+                        scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].production;
+
+                        scene[`GPUText${i}`].setText(`${scene[`GPUText${i}Content`].GPUprices} | ${scene[`GPUText${i}Content`].GPUamount} | ${scene[`GPUText${i}Content`].GPUproduction}`); 
+
                         if(scene.scoreboard !== null){
                             scene.scoreboard.setText(Math.round(scene.score));
                         }
