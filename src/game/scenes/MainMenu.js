@@ -99,7 +99,7 @@ this.input.keyboard.on("keydown", (event) => {
     }
 });
 
-        //this.scene.start('MainGame');
+        this.scene.start('MainGame');
         this.MainMenu.on('pointerdown', () => {
             if(username === "admin" && password === "admin"){
             this.start = true;

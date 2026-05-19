@@ -119,15 +119,24 @@ export function __UpgradeEXE__(scene) {
 
             scene.C_UpgradeEXE.addAt(scene.UpdateEXEBackground, 0);
 
+            scene.physics.add.existing(scene.UpdateEXEBackground);
+
             let Poy = -200;
             scene.arrGPU.forEach((GPU,i) => {
                 scene[`GPU${i}`].setScale(0.2);
                 scene.C_UpgradeEXE.addAt(scene[`GPU${i}`],1);
-                scene[`GPU${i}`].setVisible(true);
+                scene[`GPU${i}`].setVisible(false);
 
                 scene[`GPU${i}`].y = Poy;
                 
                 Poy += 100;
+                
+                scene.physics.add.existing(scene[`GPU${i}`]);
+
+                scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`], () => {
+                    scene[`GPU${i}`].setVisible(true);
+                });
+
             });
 
               scene.C_UpgradeEXE.setInteractive({
@@ -176,9 +185,10 @@ export function __UpgradeEXE__(scene) {
             scene.C_UpgradeEXE.on("pointerdown", () => {
                 switch (scene.activeZone) {
                     case "close":
-                        scene.arrGPU.forEach((GPU,i) => {
+                        scene.arrGPU.forEach((GPU, i) => {
                             scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
                             scene[`GPU${i}`].removeInteractive();
+                            scene[`GPU${i}`].off('pointerdown'); // ✓ Listener entfernen
                             scene[`GPU${i}`].setVisible(false);
                         });
                         scene.C_UpgradeEXE.destroy();
@@ -206,6 +216,13 @@ export function __UpgradeEXE__(scene) {
 
                             scene[`GPU${i}`].y += 50;
                             Progress += 5
+
+                            if(scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
+                                scene[`GPU${i}`].setVisible(true);
+                            }
+                            if(!scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
+                                scene[`GPU${i}`].setVisible(flase);       
+                            }
                         });
                     }else if(deltaY > 0 && Progress > -450){
                         console.log(Progress);
@@ -213,6 +230,13 @@ export function __UpgradeEXE__(scene) {
                         scene.arrGPU.forEach((GPU,i) => {
                             scene[`GPU${i}`].y -=  50;
                             Progress -= 5
+
+                            if(scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
+                                scene[`GPU${i}`].setVisible(true);
+                            }
+                            if(!scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
+                                scene[`GPU${i}`].setVisible(flase);       
+                            }
                         });
                     }
                 }
@@ -228,22 +252,26 @@ export function __UpgradeEXE__(scene) {
 
                         scene.score -=  scene.arrGPUStats[`arrGPU${i}Stats`].prices;
 
-                        scene.arrGPUStats[`arrGPU${i}Stats`].prices = GPUPrices(scene.arrGPUStats[`arrGPU${i}Stats`].prices);
-                        
-                        scene.scoreboard.setText(Math.round(scene.score));
-
                         scene.arrGPUStats[`arrGPU${i}Stats`].status = true;
                         scene.arrGPUStats[`arrGPU${i}Stats`].amount++;
-                    }else{
+
+                        scene.arrGPUStats[`arrGPU${i}Stats`].prices = GPUPrices(scene.arrGPUStats[`arrGPU${i}Stats`].prices);
+                        
+                        if(scene.scoreboard !== null){
+                            scene.scoreboard.setText(Math.round(scene.score));
+                        }
+
+                    }else if(scene.score < scene.arrGPUStats[`arrGPU${i}Stats`].prices){
                         scene.sound.play("DeclineSound");
                     }
                 });
             });
 
         }else{
-            scene.arrGPU.forEach((GPU,i) => {
+            scene.arrGPU.forEach((GPU, i) => {
                 scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
                 scene[`GPU${i}`].removeInteractive();
+                scene[`GPU${i}`].off('pointerdown'); // ✓ Listener entfernen
                 scene[`GPU${i}`].setVisible(false);
             });
             scene.C_UpgradeEXE.destroy();

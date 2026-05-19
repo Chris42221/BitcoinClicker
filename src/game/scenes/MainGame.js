@@ -166,8 +166,9 @@ export default class MainGame extends Scene {
     
     UpdateTheScoreOfBitcoin(){
         this.arrGPU.forEach((GPU,i) => {
-            if(this.arrGPUStats[`arrGPU${i}Stats`].status == true);
-            this.score = GPUScore(this.score,this.arrGPUStats[`arrGPU${i}Stats`].production,this.arrGPUStats[`arrGPU${i}Stats`].amount);
+            if(this.arrGPUStats[`arrGPU${i}Stats`].status == true){
+                this.score = GPUScore(this.score,this.arrGPUStats[`arrGPU${i}Stats`].production,this.arrGPUStats[`arrGPU${i}Stats`].amount);
+            }
         });
 
         if(this.scoreboard != null){
