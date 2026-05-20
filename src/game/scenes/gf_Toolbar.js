@@ -110,7 +110,7 @@ export function __UpgradeEXE__(scene) {
         if(scene.C_UpgradeEXE === null){
 
             console.log("Upgrade.exe");
-            scene.UpdateEXEBackground = scene.add.image(0,0,"BitCoinEXEBackground");
+            scene.UpdateEXEBackground = scene.add.image(0,0,"UpdateEXEBackground");
 
             scene.C_UpgradeEXE = scene.add.container(
                 scene.scale.width / 2,
@@ -294,7 +294,7 @@ export function __UpgradeEXE__(scene) {
             scene.arrGPU.forEach((GPU, i) => {
                 scene.C_UpgradeEXE.remove(scene[`GPU${i}`]);
                 scene[`GPU${i}`].removeInteractive();
-                scene[`GPU${i}`].off('pointerdown'); // ✓ Listener entfernen
+                scene[`GPU${i}`].off('pointerdown');
                 scene[`GPU${i}`].setVisible(false);
             });
             scene.C_UpgradeEXE.destroy();

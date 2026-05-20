@@ -153,7 +153,7 @@ export default class MainGame extends Scene {
         this.load.image("GameBackground","GameBackground.png");
         this.load.image("coin","coin.png");
         this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png");
-
+        this.load.image("UpdateEXEBackground","UpdateEXEBackground.png");
 
 
         //Laden der Sounds
@@ -250,7 +250,8 @@ export default class MainGame extends Scene {
         let sizeCB = getResponsiveSize(this.BitCoinEXEBackground ?.width,this.BitCoinEXEBackground ?.height,window.innerWidth,window.innerHeight);
         this.C_BitcoinEXE ?.setScale(sizeCB.scale/2);
 
-        let sizeCU = getResponsiveSize(this.UpdateEXEBackground ?.width,this.UpdateEXEBackground ?.height,window.innerWidth);
+        let sizeCU = getResponsiveSize(this.UpdateEXEBackground?.width,this.UpdateEXEBackground?.height,window.innerWidth,window.innerHeight);
+        this.C_UpgradeEXE ?.setScale(sizeCU.scale/1.4);
     }
 
     //Setzt die Position neu anhand der Bildschirmposition
