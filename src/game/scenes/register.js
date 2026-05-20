@@ -1,6 +1,17 @@
 import { Scene } from "phaser";
 import { getResponsiveSize } from "./f_update";
 
+
+export default class register extends Scene {
+ constructor() {
+        super('register');
+    }
+
+}
+/*
+import { Scene } from "phaser";
+import { getResponsiveSize } from "./f_update";
+
 export default class register extends Scene {
 
     text;
@@ -146,7 +157,7 @@ this.input.on('pointerdown', (pointer) => {
             usernameeingabe = false;
             console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
         });
-*/
+*
 
 
 
@@ -214,4 +225,4 @@ this.input.keyboard.on("keydown", (event) => {
          this.logincontainer ?.setPosition(W*0.25,H*0.5);
      }
 }
-
+*/
