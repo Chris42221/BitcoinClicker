@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
 import { getResponsiveSize } from "./f_update";
 
-export default class MainMenu extends Scene {
+export default class register extends Scene {
 
     text;
     start = null;
@@ -10,7 +10,7 @@ export default class MainMenu extends Scene {
     loginWindow;
 
     constructor() {
-        super('mainmenu');
+        super('register');
     }
 
     preload(){
