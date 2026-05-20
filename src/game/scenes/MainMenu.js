@@ -33,10 +33,8 @@ export default class MainMenu extends Scene {
 
         this.loginWindow = this.add.image(0, 0, 'loginwindow')
 
-        let usernametext = this.add.text(-67, -63, "username", {fontFamily: 'tahoma', fontSize: 32, color: '#000000ff'} )
-        let passwordtext = this.add.text(-67, 12, "password", {fontFamily: 'tahoma', fontSize: 32, color: '#000000ff'} )
-
-        this.MainMenu = this.add.text(this.scale.width / 2, 300, 'MainMenu', { fontFamily: 'Arial', fontSize: 64, color: '#0026ff' });
+        let usernametext = this.add.text(-50, -45, "username", {fontFamily: 'tahoma', fontSize: 22, color: '#000000ff'} )
+        let passwordtext = this.add.text(-50, 8, "password", {fontFamily: 'tahoma', fontSize: 22, color: '#000000ff'} )
 
 
 
@@ -59,17 +57,12 @@ export default class MainMenu extends Scene {
         this.logincontainer.setInteractive({
             hitArea: {},
             hitAreaCallback: (area, x, y) => {
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-72, -65, 265, 39), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-72, -45, 265, 39), x, y)) {
                     this.activeZone = "user";
                     return true;
 
                 };
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-72, 13, 265, 39), x, y)) {
-                    this.activeZone = "password";
-                    return true;
-                    
-                };
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-72, 13, 265, 39), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-50, 8, 265, 39), x, y)) {
                     this.activeZone = "password";
                     return true;
                     
@@ -201,7 +194,7 @@ this.input.keyboard.on("keydown", (event) => {
  
         //Skaliert die Objekte neu anhand der Bildschirmposition
         let SizeLogin = getResponsiveSize(this.loginWindow.width,this.loginWindow.height,window.innerWidth,innerHeight);
-        this.loginWindow = this.loginWindow.setScale(SizeLogin.scale/1.5);
+        this.logincontainer = this.logincontainer.setScale(SizeLogin.scale/1.5);
      }
  
      //Setzt die Position neu anhand der Bildschirmposition
