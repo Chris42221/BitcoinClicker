@@ -111,6 +111,7 @@ export function __UpgradeEXE__(scene) {
 
             console.log("Upgrade.exe");
             scene.UpdateEXEBackground = scene.add.image(0,0,"UpdateEXEBackground");
+            scene.UpdateEXEFrontBackground = scene.add.image(0,5,"UpdateEXEFrontBackground");
 
             scene.C_UpgradeEXE = scene.add.container(
                 scene.scale.width / 2,
@@ -118,22 +119,24 @@ export function __UpgradeEXE__(scene) {
             );
 
             scene.C_UpgradeEXE.addAt(scene.UpdateEXEBackground, 0);
+            scene.C_UpgradeEXE.addAt(scene.UpdateEXEFrontBackground,0);
 
-            scene.physics.add.existing(scene.UpdateEXEBackground);
+            scene.physics.add.existing(scene.UpdateEXEFrontBackground);
 
-            let Poy = -200;
+            let Poy = -190;
             scene.arrGPU.forEach((GPU,i) => {
                 scene[`GPU${i}`].setScale(0.2);
-                scene.C_UpgradeEXE.addAt(scene[`GPU${i}`],1);
+                scene.C_UpgradeEXE.addAt(scene[`GPU${i}`],10);
                 scene[`GPU${i}`].setVisible(false);
 
                 scene[`GPU${i}`].y = Poy;
+                scene[`GPU${i}`].x = -70;
                 scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].prices;
                 scene[`GPUText${i}Content`].GPUamount = scene.arrGPUStats[`arrGPU${i}Stats`].amount;
                 scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].production;
                 
-                scene[`GPUText${i}`] = scene.add.text(100, 0,`Owned: ${scene[`GPUText${i}Content`].GPUamount}\nPrices: ${scene[`GPUText${i}Content`].GPUprices}\nBtc/s: ${scene[`GPUText${i}Content`].GPUproduction}`,{ fontFamily: 'Tahoma Regular', fontSize: 20, color: '#ffffff' });
-                scene.C_UpgradeEXE.addAt(scene[`GPUText${i}`],1);
+                scene[`GPUText${i}`] = scene.add.text(30, 0,`Owned: ${scene[`GPUText${i}Content`].GPUamount}\nPrices: ${scene[`GPUText${i}Content`].GPUprices}\nBtc/s: ${scene[`GPUText${i}Content`].GPUproduction}`,{ fontFamily: 'Tahoma Regular', fontSize: 20, color: '#ffffff' });
+                scene.C_UpgradeEXE.addAt(scene[`GPUText${i}`],10);
                 scene[`GPUText${i}`].setVisible(false);
                 scene[`GPUText${i}`].y = Poy - 36;
 
@@ -141,7 +144,7 @@ export function __UpgradeEXE__(scene) {
                 
                 scene.physics.add.existing(scene[`GPU${i}`]);
 
-                if(scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
+                if(scene.physics.world.overlap(scene.UpdateEXEFrontBackground, scene[`GPU${i}`])){
                     scene[`GPU${i}`].setVisible(true);
                     scene[`GPUText${i}`].setVisible(true);
                 }
@@ -151,19 +154,19 @@ export function __UpgradeEXE__(scene) {
               scene.C_UpgradeEXE.setInteractive({
                 hitArea: {},
                 hitAreaCallback: (area, x, y) => {
-                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-350, -300, 610, 50), x, y)) {
+                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-197, -345, 300, 50), x, y)) {
                         scene.activeZone = "drag";
                         return true;
                     }
-                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(300, -290, 40, 40), x, y)) {
+                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(147, -342, 40, 36), x, y)) {
                         scene.activeZone = "close";
                         return true;
                     }
-                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(250, -290, 40, 40), x, y)) {
+                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(105, -342, 40, 36), x, y)) {
                         scene.activeZone = "help";
                         return true;
                     }
-                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-340, -240, 670, 530), x, y)) {
+                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-187, -300, 380, 635), x, y)) {
                         scene.activeZone = "scroll";
                         return true;
                     }
@@ -219,43 +222,26 @@ export function __UpgradeEXE__(scene) {
             let Progress = 10;
             scene.C_UpgradeEXE.on("wheel",(pointer, deltaX, deltaY, deltaZ, event) => {
                 if(scene.activeZone === "scroll"){
-                    if(deltaY < 0 && Progress < 10){
-                        scene.arrGPU.forEach((GPU,i) => {
-                            console.log(Progress);
+                    scene.arrGPU.forEach((GPU,i) => {
 
+                        if(deltaY < 0 && Progress < 10){
                             scene[`GPU${i}`].y += 50;
                             scene[`GPUText${i}`].y += 50;
-                            Progress += 5
-
-
-                            if(scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
-                                scene[`GPU${i}`].setVisible(true);
-                                scene[`GPUText${i}`].setVisible(true);
-                            }else if(!scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
-                                scene[`GPU${i}`].setVisible(false);
-                                scene[`GPUText${i}`].setVisible(false);       
-                            }
-                            
-                        });
-                    }else if(deltaY > 0 && Progress > -450){
-                        console.log(Progress);
-
-                        scene.arrGPU.forEach((GPU,i) => {
+                            Progress += 10
+                        }else if(deltaY > 0 && Progress > -1000){
                             scene[`GPU${i}`].y -=  50;
                             scene[`GPUText${i}`].y -= 50;
-                            Progress -= 5
+                            Progress -= 10
+                        }
 
-
-                            if(scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
-                                scene[`GPU${i}`].setVisible(true);
-                                scene[`GPUText${i}`].setVisible(true);
-                            }else if(!scene.physics.world.overlap(scene.UpdateEXEBackground, scene[`GPU${i}`])){
-                                scene[`GPU${i}`].setVisible(false); 
-                                scene[`GPUText${i}`].setVisible(false);      
-                            }
-
-                        });
-                    }
+                        if(scene.physics.world.overlap(scene.UpdateEXEFrontBackground, scene[`GPU${i}`])){
+                            scene[`GPU${i}`].setVisible(true);
+                            scene[`GPUText${i}`].setVisible(true);
+                        }else if(!scene.physics.world.overlap(scene.UpdateEXEFrontBackground, scene[`GPU${i}`])){
+                            scene[`GPU${i}`].setVisible(false); 
+                            scene[`GPUText${i}`].setVisible(false);      
+                        }
+                    })
                 }
             })
 
@@ -300,6 +286,7 @@ export function __UpgradeEXE__(scene) {
             scene.C_UpgradeEXE.destroy();
             scene.UpdateEXEBackground = null;
             scene.C_UpgradeEXE = null;
+            scene.UpdateEXEFrontBackground = null;
         }
     })
 }

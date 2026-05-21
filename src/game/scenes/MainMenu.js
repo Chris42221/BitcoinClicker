@@ -38,7 +38,7 @@ export default class MainMenu extends Scene {
 
 
 
-       this.MainMenu.setInteractive();
+       //this.MainMenu.setInteractive(); /////////////////////////!!!!!!!!!!!!!!\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         let username = "";
         let password = "";
@@ -168,7 +168,8 @@ this.input.keyboard.on("keydown", (event) => {
     }
 });
 
-        //this.scene.start('MainGame');
+        this.scene.start('MainGame');
+/*                                                  /////////////////////////!!!!!!!!!!!!!!\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         this.MainMenu.on('pointerdown', () => {
             if(username === "admin" && password === "admin"){
             this.start = true;
@@ -177,8 +178,8 @@ this.input.keyboard.on("keydown", (event) => {
             }else{
                 console.log('MainMenu clicked - invalid credentials');
             }
-        });
-        
+});                                                /////////////////////////!!!!!!!!!!!!!!\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        */
 
         //Reagiert wenn die Größe sich verändert
         this.scale.on('resize', this.onResize, this);

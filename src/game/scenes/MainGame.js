@@ -10,6 +10,7 @@ export default class MainGame extends Scene {
     background;
     BitCoinEXEBackground;
     UpdateEXEBackground;
+    UpdateEXEFrontBackground;
 
     activeZone = null;
     staticObjects;
@@ -154,6 +155,7 @@ export default class MainGame extends Scene {
         this.load.image("coin","coin.png");
         this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png");
         this.load.image("UpdateEXEBackground","UpdateEXEBackground.png");
+        this.load.image("UpdateEXEFrontBackground","FrontBackground.png");
 
 
         //Laden der Sounds
