@@ -19,9 +19,28 @@ export function __BitcoinEXE__(scene) {
             scene.C_BitcoinEXE.addAt(scene.coin, 1);
             scene.C_BitcoinEXE.addAt(scene.scoreboard, 1);
 
+            scene.bringToFront(scene.C_BitcoinEXE);
+
             scene.C_BitcoinEXE.setInteractive({
                 hitArea: {},
                 hitAreaCallback: (area, x, y) => {
+                    // Prüfen ob ein anderes Fenster mit höherer Depth darüber liegt
+                    const windows = [scene.C_BitcoinEXE, scene.C_UpgradeEXE]
+                        .filter(w => w !== null && w !== scene.C_BitcoinEXE);
+
+                    const isBlocked = windows.some(w => {
+                        if(w.depth <= scene.C_BitcoinEXE.depth) return false;
+                        // Prüfen ob der Klickpunkt innerhalb des anderen Fensters liegt
+                        const bounds = w.getBounds();
+                        return bounds.contains(
+                            scene.C_BitcoinEXE.x + x,
+                            scene.C_BitcoinEXE.y + y
+                        );
+                    });
+
+                    if(isBlocked) return false;
+
+
                     if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-350, -300, 610, 50), x, y)) {
                         scene.activeZone = "drag";
                         return true;
@@ -47,6 +66,7 @@ export function __BitcoinEXE__(scene) {
 
             scene.C_BitcoinEXE.on("dragstart", () => {
                 if (scene.activeZone === "drag") {
+                    scene.bringToFront(scene.C_BitcoinEXE);
                     scene.input.setDefaultCursor("url(assets/cursors/hnesw.cur), pointer");
                 }
             });
@@ -63,6 +83,7 @@ export function __BitcoinEXE__(scene) {
             });
 
             scene.C_BitcoinEXE.on("pointerdown", () => {
+                scene.bringToFront(scene.C_BitcoinEXE);
                 switch (scene.activeZone) {
                     case "coin":
                         scene.score = addToScore(scene.score, 1);
@@ -123,6 +144,8 @@ export function __UpgradeEXE__(scene) {
 
             scene.physics.add.existing(scene.UpdateEXEFrontBackground);
 
+            scene.bringToFront(scene.C_UpgradeEXE);
+
             let Poy = -190;
             scene.arrGPU.forEach((GPU,i) => {
                 scene[`GPU${i}`].setScale(0.2);
@@ -154,6 +177,23 @@ export function __UpgradeEXE__(scene) {
               scene.C_UpgradeEXE.setInteractive({
                 hitArea: {},
                 hitAreaCallback: (area, x, y) => {
+
+                // Prüfen ob ein anderes Fenster mit höherer Depth darüber liegt
+                const windows = [scene.C_BitcoinEXE, scene.C_UpgradeEXE]
+                    .filter(w => w !== null && w !== scene.C_UpgradeEXE);
+
+                const isBlocked = windows.some(w => {
+                    if(w.depth <= scene.C_UpgradeEXE.depth) return false;
+                    // Prüfen ob der Klickpunkt innerhalb des anderen Fensters liegt
+                    const bounds = w.getBounds();
+                    return bounds.contains(
+                        scene.C_UpgradeEXE.x + x,
+                        scene.C_UpgradeEXE.y + y
+                    );
+                });
+
+                if(isBlocked) return false;
+
                     if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-197, -345, 300, 50), x, y)) {
                         scene.activeZone = "drag";
                         return true;
@@ -178,6 +218,7 @@ export function __UpgradeEXE__(scene) {
             });
 
             scene.C_UpgradeEXE.on("dragstart", () => {
+                scene.bringToFront(scene.C_UpgradeEXE);
                 if (scene.activeZone === "drag") {
                     scene.input.setDefaultCursor("url(assets/cursors/hnesw.cur), pointer");
                 }
@@ -195,6 +236,7 @@ export function __UpgradeEXE__(scene) {
             });
 
             scene.C_UpgradeEXE.on("pointerdown", () => {
+                scene.bringToFront(scene.C_UpgradeEXE);
                 switch (scene.activeZone) {
                     case "close":
                         scene.arrGPU.forEach((GPU, i) => {

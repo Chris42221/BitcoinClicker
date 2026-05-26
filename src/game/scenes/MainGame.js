@@ -12,8 +12,10 @@ export default class MainGame extends Scene {
     UpdateEXEBackground;
     UpdateEXEFrontBackground;
 
+    activeWindow = null;
     activeZone = null;
     staticObjects;
+    windowDepth = 0;
 
     score = 0;
     scoreboard;
@@ -212,6 +214,14 @@ export default class MainGame extends Scene {
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
         this.ToolbarUpgrades.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
+
+        // Funktion die jedes Fenster aufruft wenn es angeklickt wird
+        this.bringToFront = function(container) {
+            this.windowDepth++;
+            container.setDepth(this.windowDepth);
+            this.activeWindow = container;
+        }
+
 
         //Reagiert wenn die Größe sich verändert
         this.scale.on('resize', this.onResize, this);
