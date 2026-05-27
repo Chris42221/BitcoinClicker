@@ -24,6 +24,10 @@ export default class MainMenu extends Scene {
 
     create() {
 
+        //Setzten des Deault Courser
+        this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), default");
+
+
         const W = this.scale.width;
         const H = this.scale.height;
 
@@ -57,30 +61,31 @@ export default class MainMenu extends Scene {
         this.logincontainer.setInteractive({
             hitArea: {},
             hitAreaCallback: (area, x, y) => {
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-72, -45, 265, 39), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-55, -47, 197, 30), x, y)) {
                     this.activeZone = "user";
                     return true;
 
                 };
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-50, 8, 265, 39), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-55, 6, 197, 30), x, y)) {
                     this.activeZone = "password";
                     return true;
                     
                 };
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(50, 57, 154, 67), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(35, 43, 110, 40), x, y)) {
                 this.activeZone = "continue";
                 return true;
                 };
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-208, 215, 154, 67), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-208, 215, 110, 40), x, y)) {
                 this.activeZone = "Register";
                 return true;
                 };
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(50, 215, 154, 67), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(35, 150, 110, 40), x, y)) {
                 this.activeZone = "Guestlogin";
                 return true;
                 };
-
-        }});
+        },
+        cursor: "url(assets/cursors/harrow.cur), pointer",
+    });
 
 this.input.on('pointerdown', (pointer) => {
     if (!this.logincontainer) return;
