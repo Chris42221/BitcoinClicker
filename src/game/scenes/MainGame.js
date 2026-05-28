@@ -155,6 +155,7 @@ export default class MainGame extends Scene {
         //Laden der Bilder
         this.load.image("GameBackground","GameBackground.png");
         this.load.image("coin","coin.png");
+        this.load.image("upgrade","Upgrade.png");
         this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png");
         this.load.image("UpdateEXEBackground","UpdateEXEBackground.png");
         this.load.image("UpdateEXEFrontBackground","FrontBackground.png");
@@ -209,7 +210,7 @@ export default class MainGame extends Scene {
 
         this.ToolbarCoin = this.add.image(W*0.21,H*0.9777,"coin");
 
-        this.ToolbarUpgrades = this.add.image(W*0.235,H*0.9777,"");
+        this.ToolbarUpgrades = this.add.image(W*0.235,H*0.9777,"upgrade");
 
         // Die Objekte werden jetzt für Interactionen freigegeben
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});

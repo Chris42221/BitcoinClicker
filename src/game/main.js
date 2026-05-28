@@ -1,10 +1,9 @@
 import { AUTO, Game } from 'phaser';
 import MainGame from './scenes/MainGame';
 import MainMenu from './scenes/MainMenu';
+import Register from './scenes/register';
 
 
-//  Find out more information about the Game Config at:
-//  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
   type: Phaser.WEBGL,
   parent: 'game-container',
@@ -12,14 +11,19 @@ const config = {
   dom: { createContainer: true },
 
   scale: {
-    mode: Phaser.Scale.RESIZE,         // Canvas = immer Browsergröße
-    autoCenter: Phaser.Scale.CENTER_BOTH, // Automatisch zentrieren
+    mode: Phaser.Scale.RESIZE,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   physics: {
     default: 'arcade'
   },
 
-  scene: [MainMenu, MainGame]
+  scene: [
+    MainMenu, 
+    MainGame,
+    Register,
+
+  ]
 }; 
 
 

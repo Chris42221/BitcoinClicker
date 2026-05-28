@@ -10,7 +10,7 @@ export default class MainMenu extends Scene {
     loginWindow;
 
     constructor() {
-        super('mainmenu');
+        super('MainMenu');
     }
 
     preload(){
@@ -39,10 +39,6 @@ export default class MainMenu extends Scene {
 
         let usernametext = this.add.text(-50, -45, "username", {fontFamily: 'tahoma', fontSize: 22, color: '#000000ff'} )
         let passwordtext = this.add.text(-50, 8, "password", {fontFamily: 'tahoma', fontSize: 22, color: '#000000ff'} )
-
-
-
-       //this.MainMenu.setInteractive(); /////////////////////////!!!!!!!!!!!!!!\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         let username = "";
         let password = "";
@@ -75,11 +71,11 @@ export default class MainMenu extends Scene {
                 this.activeZone = "continue";
                 return true;
                 };
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-208, 215, 110, 40), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(-155, 155, 110, 40), x, y)) {
                 this.activeZone = "Register";
                 return true;
                 };
-                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(35, 150, 110, 40), x, y)) {
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(35, 155, 110, 40), x, y)) {
                 this.activeZone = "Guestlogin";
                 return true;
                 };
@@ -120,7 +116,7 @@ this.input.on('pointerdown', (pointer) => {
                     }
                     break;
                 case "Register":
-                    this.scene.start('register');
+                    this.scene.start('Register');
                     
                     break;   
                 case "Guestlogin":
@@ -132,22 +128,9 @@ this.input.on('pointerdown', (pointer) => {
 
             }
         })
-        
-        
 
 
-/*  usernameeingabe = true;
-                    passwordeingabe = false;
-                    console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
-        invisibleZone.on('pointerdown', () => {
-            passwordeingabe = true;
-            usernameeingabe = false;
-            console.log("username ", usernameeingabe, "passwort ", passwordeingabe)
-        });
-*/
-
-
-
+    let ZensurPassword = "";
 this.input.keyboard.on("keydown", (event) => {
     if (usernameeingabe == true) {
         if (event.key == "Backspace") {
@@ -163,28 +146,19 @@ this.input.keyboard.on("keydown", (event) => {
     if (passwordeingabe == true) {
         if(event.key == "Backspace"){
             password = password.slice(0, -1);
+            ZensurPassword = ZensurPassword.slice(0, -1);
             console.log("password: ", password)
-            passwordtext.setText(password)
+            passwordtext.setText(ZensurPassword);
         } else if (event.code.startsWith("Key")) {
             password += event.key;
-            console.log("password: ", password)
-            passwordtext.setText(password)
+            ZensurPassword = ZensurPassword.concat("","*");
+            console.log("password: ", password);
+            console.log("password: ", ZensurPassword);
+            passwordtext.setText(ZensurPassword);
         }
     }
 });
 
-        //this.scene.start('MainGame');
-/*                                                  /////////////////////////!!!!!!!!!!!!!!\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        this.MainMenu.on('pointerdown', () => {
-            if(username === "admin" && password === "admin"){
-            this.start = true;
-            console.log('MainMenu clicked - valid credentials'); 
-            this.scene.start('MainGame');
-            }else{
-                console.log('MainMenu clicked - invalid credentials');
-            }
-});                                                /////////////////////////!!!!!!!!!!!!!!\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        */
 
         //Reagiert wenn die Größe sich verändert
         this.scale.on('resize', this.onResize, this);
@@ -213,4 +187,3 @@ this.input.keyboard.on("keydown", (event) => {
          this.logincontainer ?.setPosition(W*0.25,H*0.5);
      }
 }
-
