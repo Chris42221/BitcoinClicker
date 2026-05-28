@@ -18,10 +18,6 @@ export default class MainMenu extends Scene {
         this.load.image("loginwindow","assets/login_fenster.png");
     }
 
-    input(){
-        
-    }
-
     create() {
 
         //Setzten des Deault Courser
