@@ -113,11 +113,9 @@ this.input.on('pointerdown', (pointer) => {
                     break;
                 case "Register":
                     this.scene.start('Register');
-                    
                     break;   
                 case "Guestlogin":
                     this.scene.start('MainGame')
-                    
                     break; 
                 default:
                     break;
@@ -138,7 +136,8 @@ this.input.keyboard.on("keydown", (event) => {
             console.log("username: ", username)
             usernametext.setText(username);
         }
-    } 
+    }
+
     if (passwordeingabe == true) {
         if(event.key == "Backspace"){
             password = password.slice(0, -1);
@@ -167,7 +166,6 @@ this.input.keyboard.on("keydown", (event) => {
     }
 
     update(){
- 
         //Skaliert die Objekte neu anhand der Bildschirmposition
         let SizeLogin = getResponsiveSize(this.loginWindow.width,this.loginWindow.height,window.innerWidth,innerHeight);
         this.logincontainer = this.logincontainer.setScale(SizeLogin.scale/1.5);
