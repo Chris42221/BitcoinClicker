@@ -299,7 +299,6 @@ export function __UpgradeEXE__(scene) {
 
                         scene.arrGPUStats[`arrGPU${i}Stats`].status = true;
                         scene.arrGPUStats[`arrGPU${i}Stats`].amount++;
-
                         scene.arrGPUStats[`arrGPU${i}Stats`].prices = GPUPrices(scene.arrGPUStats[`arrGPU${i}Stats`].prices);
 
                         scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].prices;
