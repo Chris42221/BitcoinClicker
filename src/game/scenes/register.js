@@ -95,11 +95,42 @@ export default class Register extends Scene {
                     console.log("password", usernameeingabe, "passwort ", passwordeingabe)
                     break;
                 case "continue":
+                    UserPost(this);
+                    async function UserPost(scene) {
+                        const ExisUser = await fetch(`http://localhost:3000/player/acount/login/${username}`);
+                        if(!ExisUser.ok){
+                            console.log("Benutzername oder Passwort ungültig");
+                            return;
+                        }
+                        const ExisUserJson = await ExisUser.json();
 
-                    //Code um den User in die Datenbank zu vermerken
+                        console.log(ExisUserJson);
 
-                    this.scene.start("MainMenu");
+                        if(ExisUserJson.length != 0){
+                            console.log("Benutzername bereits vergeben");
+                            return;
+                        }
 
+                        if(username.trim == "" || password.trim == ""){
+                            console.log("Benutzername oder Passwort ungültig");
+                            return;
+                        }
+
+                        const User = await fetch(`http://localhost:3000/player/acount/create`,{
+                            method: "POST",
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                Username: username,
+                                Password: password
+                            })
+                        });
+                        if(!User.ok){
+                            console.log("Fehler beim Erstellen des Benutzers");
+                            return;
+                        }else{
+                            scene.scene.start("MainMenu");
+                        }
+                    }
                     break;
                 case "Login":
                     this.scene.start('MainMenu');

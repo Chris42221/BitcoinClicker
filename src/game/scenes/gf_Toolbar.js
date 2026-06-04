@@ -154,9 +154,9 @@ export function __UpgradeEXE__(scene) {
 
                 scene[`GPU${i}`].y = Poy;
                 scene[`GPU${i}`].x = -70;
-                scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].prices;
-                scene[`GPUText${i}Content`].GPUamount = scene.arrGPUStats[`arrGPU${i}Stats`].amount;
-                scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].production;
+                scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices;
+                scene[`GPUText${i}Content`].GPUamount = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount;
+                scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount;
                 
                 scene[`GPUText${i}`] = scene.add.text(30, 0,`Owned: ${scene[`GPUText${i}Content`].GPUamount}\nPrices: ${scene[`GPUText${i}Content`].GPUprices}\nBtc/s: ${scene[`GPUText${i}Content`].GPUproduction}`,{ fontFamily: 'Tahoma Regular', fontSize: 20, color: '#ffffff' });
                 scene.C_UpgradeEXE.addAt(scene[`GPUText${i}`],10);
@@ -292,18 +292,18 @@ export function __UpgradeEXE__(scene) {
                 scene[`GPU${i}`].setInteractive();
 
                 scene[`GPU${i}`].on("pointerdown", () => {
-                    if (scene.score >= scene.arrGPUStats[`arrGPU${i}Stats`].prices){
+                    if (scene.score >= scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices){
                         console.log("GPU1");
 
-                        scene.score -=  scene.arrGPUStats[`arrGPU${i}Stats`].prices;
+                        scene.score -=  scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices;
 
-                        scene.arrGPUStats[`arrGPU${i}Stats`].status = true;
-                        scene.arrGPUStats[`arrGPU${i}Stats`].amount++;
-                        scene.arrGPUStats[`arrGPU${i}Stats`].prices = GPUPrices(scene.arrGPUStats[`arrGPU${i}Stats`].prices);
+                        scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Status = true;
+                        scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount++;
+                        scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices = GPUPrices(scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices);
 
-                        scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].prices;
-                        scene[`GPUText${i}Content`].GPUamount = scene.arrGPUStats[`arrGPU${i}Stats`].amount;
-                        scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].production;
+                        scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices;
+                        scene[`GPUText${i}Content`].GPUamount = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount;
+                        scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Production;
 
                         scene[`GPUText${i}`].setText(`Owned: ${scene[`GPUText${i}Content`].GPUamount}\nPrices: ${scene[`GPUText${i}Content`].GPUprices}\nBtc/s: ${scene[`GPUText${i}Content`].GPUproduction}`);
 
@@ -311,7 +311,7 @@ export function __UpgradeEXE__(scene) {
                             scene.scoreboard.setText(Math.round(scene.score));
                         }
 
-                    }else if(scene.score < scene.arrGPUStats[`arrGPU${i}Stats`].prices){
+                    }else if(scene.score < scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices){
                         scene.sound.play("DeclineSound");
                     }
                 });

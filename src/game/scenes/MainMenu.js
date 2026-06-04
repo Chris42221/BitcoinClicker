@@ -103,12 +103,26 @@ this.input.on('pointerdown', (pointer) => {
                     console.log("password", usernameeingabe, "passwort ", passwordeingabe)
                     break;
                 case "continue":
-                    if(username === "admin" && password === "admin"){
-                    this.start = true;
-                    console.log('MainMenu clicked - valid credentials'); 
-                    this.scene.start('MainGame');
-                    }else{
-                    console.log('MainMenu clicked - invalid credentials');
+                    UserFetch(this);
+                    async function UserFetch(scene) {
+                        const User = await fetch(`http://localhost:3000/player/acount/login/${username}`);
+                        if(!User.ok){
+                            console.log("Fehler beim Abrufen der Benutzerdaten");
+                        }
+                        const UserJson = await User.json();
+
+                        if(UserJson.length == 0){
+                            console.log("Benutzer existiert nicht");
+                            return;
+                        }
+
+                        if(password === UserJson[0].Password){
+                            scene.scene.start('MainGame',{
+                                userData: UserJson[0]
+                            });
+                        }else{
+                            console.log("Falsches Passwort");
+                        }
                     }
                     break;
                 case "Register":
