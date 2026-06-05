@@ -120,6 +120,9 @@ export default class MainGame extends Scene {
 
     SavePlayerprogressJSON;
     SaveGpuprogressJSON;
+    SaveGPUPlayerSlotJSON;
+
+    onBeforeUnload;
 
     constructor() {
         super('MainGame');
@@ -208,8 +211,8 @@ export default class MainGame extends Scene {
                 }
                 this.SavePlayerprogressJSON = await SavePlayerprogress.json();
                 console.log(this.SavePlayerprogressJSON);
-                if(this.SavePlayerprogressJSON.lenght != 0){
-                    this.score = this.SavePlayerprogressJSON[0].BTC;
+                if(this.SavePlayerprogressJSON.length != 0){
+                    this.score = this.SavePlayerprogressJSON[0] ?.BTC;
                     const SaveGpuprogress = await fetch(`http://localhost:3000/player/progress/gpuprogress/getdata/${this.SavePlayerprogressJSON[0].PlayerProgress_ID}`);
                     if(!SaveGpuprogress.ok){
                         console.log("Fehler beim Abrufen des Spielerfortschritts");
@@ -217,13 +220,13 @@ export default class MainGame extends Scene {
                     this.SaveGpuprogressJSON = await SaveGpuprogress.json();
                     console.log(this.SaveGpuprogressJSON);
                     if(this.SaveGpuprogressJSON.lenght != 0){
-                        const SaveGPUPlayerSlot = await fetch(`http://localhost:3000/player/progress/gpuslot/getdata/${this.SaveGpuprogressJSON[0].PlayerProgress_ID}`);
+                        const SaveGPUPlayerSlot = await fetch(`http://localhost:3000/player/progress/gpuslot/getdata/${this.SaveGpuprogressJSON[0].GPUProgress_ID}`);
                         if(!SaveGPUPlayerSlot.ok){
                             console.log("Fehler beim Abrufen des Spielerfortschritts");
                         }
-                        const SaveGPUPlayerSlotJSON = await SaveGPUPlayerSlot.json();
-                        console.log(SaveGPUPlayerSlotJSON);
-                        SaveGPUPlayerSlotJSON.forEach((GPUSolt, i) => {
+                        this.SaveGPUPlayerSlotJSON = await SaveGPUPlayerSlot.json();
+                        console.log(this.SaveGPUPlayerSlotJSON);
+                        this.SaveGPUPlayerSlotJSON.forEach((GPUSolt, i) => {
                             this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Prices = GPUSolt.GPU_Prices;
                             this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Amount = GPUSolt.GPU_Amount;
                             this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Status = GPUSolt.GPU_Status === `true`;
@@ -231,6 +234,41 @@ export default class MainGame extends Scene {
                             console.log(this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Status);
                         });
                     }
+                }else{
+                    const PlayerProgress = await fetch ("http://localhost:3000/player/progress", {
+                        method: "POST",
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            Player_ID: this.userData.Player_ID,
+                            BTC: this.score
+                        })
+                    });
+                    if(!PlayerProgress.ok){
+                        console.log("Fehler beim Erstellen des Spielerfortschritts");
+                    }
+
+                    const SavePlayerprogress = await fetch(`http://localhost:3000/player/progress/getdata/${this.userData.Player_ID}`);
+                    if(!SavePlayerprogress.ok){
+                        console.log("Fehler beim Abrufen des Spielerfortschritts");
+                    }
+                    this.SavePlayerprogressJSON = await SavePlayerprogress.json();
+
+                    const GPUProgress = await fetch ("http://localhost:3000/player/progress/gpuprogress", {
+                        method: "POST",
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            PlayerProgress_ID: this.SavePlayerprogressJSON[0].PlayerProgress_ID
+                        })
+                    });
+                    if(!GPUProgress.ok){
+                        console.log("Fehler beim Erstellen des GPU Fortschritts");
+                    }
+
+                    const SaveGpuprogress = await fetch(`http://localhost:3000/player/progress/gpuprogress/getdata/${this.SavePlayerprogressJSON[0].PlayerProgress_ID}`);
+                    if(!SaveGpuprogress.ok){
+                        console.log("Fehler beim Abrufen des GPU Fortschritts");
+                    }
+                    this.SaveGpuprogressJSON = await SaveGpuprogress.json();
                 }
             })
         }
@@ -280,11 +318,67 @@ export default class MainGame extends Scene {
 
         //Intervall in dem das Spiel den Punktestand (Bitcoin Stand) updatet anhand der gekauften Grafikkarten
         setInterval(() => this.UpdateTheScoreOfBitcoin(), 100);
-    }
+
+        //Fortschrit Speichern
+        this.onBeforeUnload = () => {
+            if(this.userData != undefined){
+                fetch ("http://localhost:3000/player/progress", {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        Player_ID: this.userData.Player_ID,
+                        BTC: this.score
+                    }),
+                    keepalive: true
+                });
+                this.arrGPU.forEach((GPUStats, i) => {
+                    if(this.arrGPUStats[`arrGPU${i}Stats`].GPU_Status == true){
+                        const alreadySaved = this.SaveGPUPlayerSlotJSON?.some(slot => slot.GPU_ID == i + 1);
+                        if(!alreadySaved){
+                            fetch ("http://localhost:3000/player/progress/gpuslot", {
+                                method: "POST",
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    GPUProgress_ID: this.SaveGpuprogressJSON[0].GPUProgress_ID,
+                                    GPU_ID: i+1,
+                                    GPU_Status: this.arrGPUStats[`arrGPU${i}Stats`].GPU_Status,
+                                    GPU_Amount: this.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount,
+                                    GPU_Prices: this.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices
+                                }),
+                                keepalive: true
+                            });
+                        }else{
+                            const savedSlot = this.SaveGPUPlayerSlotJSON.find(slot => slot.GPU_ID == i + 1);
+                            fetch ("http://localhost:3000/player/progress/gpuslot/upgrade", {
+                                method: "POST",
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    GPUSlot: savedSlot?.GPUSlot,
+                                    GPUProgress_ID: this.SaveGpuprogressJSON[0].GPUProgress_ID,
+                                    GPU_ID: i+1,
+                                    GPU_Status: this.arrGPUStats[`arrGPU${i}Stats`].GPU_Status,
+                                    GPU_Amount: this.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount,
+                                    GPU_Prices: this.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices
+                                }),
+                                keepalive: true
+                            });
+                        };
+                    };
+                });
+            };
+        };
+
+        window.addEventListener('beforeunload', this.onBeforeUnload);
+
+        this.events.on('shutdown', () => {
+            window.removeEventListener('beforeunload', this.onBeforeUnload);
+        });
+    };
+
     
     UpdateTheScoreOfBitcoin(){
         this.arrGPU.forEach((GPU,i) => {
-            if(this.arrGPUStats[`arrGPU${i}Stats`].GPU_Status == true){
+            if(this.arrGPUStats[`arrGPU${i}Stats`].GPU_Status == true || 1){
                 this.score = GPUScore(this.score,this.arrGPUStats[`arrGPU${i}Stats`].GPU_Production,this.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount);
             }
         });
@@ -319,6 +413,6 @@ export default class MainGame extends Scene {
 
         this.ToolbarCoin ?.setPosition(W*0.21,H*0.9777);
         this.ToolbarUpgrades ?.setPosition(W*0.235,H*0.9777);
-    }
+    };
 }
 

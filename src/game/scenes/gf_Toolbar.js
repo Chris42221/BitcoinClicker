@@ -307,7 +307,7 @@ export function __UpgradeEXE__(scene) {
 
                         scene[`GPUText${i}`].setText(`Owned: ${scene[`GPUText${i}Content`].GPUamount}\nPrices: ${scene[`GPUText${i}Content`].GPUprices}\nBtc/s: ${scene[`GPUText${i}Content`].GPUproduction}`);
 
-                        if(scene.scoreboard !== null){
+                        if(scene.scoreboard != null || undefined){
                             scene.scoreboard.setText(Math.round(scene.score));
                         }
 
