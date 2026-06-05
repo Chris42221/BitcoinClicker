@@ -156,7 +156,7 @@ export function __UpgradeEXE__(scene) {
                 scene[`GPU${i}`].x = -70;
                 scene[`GPUText${i}Content`].GPUprices = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices;
                 scene[`GPUText${i}Content`].GPUamount = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount;
-                scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Amount;
+                scene[`GPUText${i}Content`].GPUproduction = scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Production;
                 
                 scene[`GPUText${i}`] = scene.add.text(30, 0,`Owned: ${scene[`GPUText${i}Content`].GPUamount}\nPrices: ${scene[`GPUText${i}Content`].GPUprices}\nBtc/s: ${scene[`GPUText${i}Content`].GPUproduction}`,{ fontFamily: 'Tahoma Regular', fontSize: 20, color: '#ffffff' });
                 scene.C_UpgradeEXE.addAt(scene[`GPUText${i}`],10);

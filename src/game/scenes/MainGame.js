@@ -217,9 +217,18 @@ export default class MainGame extends Scene {
                     this.SaveGpuprogressJSON = await SaveGpuprogress.json();
                     console.log(this.SaveGpuprogressJSON);
                     if(this.SaveGpuprogressJSON.lenght != 0){
-                        SaveGpuprogressJSON.forEach(Data,i => {
-                            //Laden der Daten mit GPU SLot und so
-                            const SaveGPUPlayerSlot = await fetch(``);
+                        const SaveGPUPlayerSlot = await fetch(`http://localhost:3000/player/progress/gpuslot/getdata/${this.SaveGpuprogressJSON[0].PlayerProgress_ID}`);
+                        if(!SaveGPUPlayerSlot.ok){
+                            console.log("Fehler beim Abrufen des Spielerfortschritts");
+                        }
+                        const SaveGPUPlayerSlotJSON = await SaveGPUPlayerSlot.json();
+                        console.log(SaveGPUPlayerSlotJSON);
+                        SaveGPUPlayerSlotJSON.forEach((GPUSolt, i) => {
+                            this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Prices = GPUSolt.GPU_Prices;
+                            this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Amount = GPUSolt.GPU_Amount;
+                            this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Status = GPUSolt.GPU_Status === `true`;
+                            console.log(GPUSolt.GPU_Prices);
+                            console.log(this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Status);
                         });
                     }
                 }
