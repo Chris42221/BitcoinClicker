@@ -3,6 +3,9 @@ import { getResponsiveSize } from "./f_update";
 
 
 export default class Register extends Scene {
+
+    text;
+
     constructor() {
         super("Register");
     }
@@ -10,12 +13,29 @@ export default class Register extends Scene {
     preload() {
         this.load.image("loginBackground", "assets/loginBackground.png");
         this.load.image("SignupWindow", "assets/Signup_window.png");
+
+        this.load.audio("BackgroundSound","assets/PCSound.mp3");
+        this.load.audio("MouseClickSound","assets/MouseClickSound.mp3");
+        this.load.audio("LoginSound","assets/LoginSound.mp3");
+        this.load.audio("ErrorSound","assets/ErrorSound.mp3");
+        this.load.audio("KeyboardSound","assets/KeyboardSound.mp3");
     }
 
     create() {
 
         //Setzten des Deault Courser
         this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), default");
+
+        //Mouse Click Sound
+        this.input.on("pointerdown",()=>{
+            this.sound.play("MouseClickSound");
+        });
+
+        //BackgroundSound
+        this.sound.add("BackgroundSound", {
+            loop: true,
+            volume: 0.3,
+        }).play();
 
         const W = this.scale.width;
         const H = this.scale.height;
@@ -27,6 +47,9 @@ export default class Register extends Scene {
 
         let usernametext = this.add.text(-50, -45, "username", { fontFamily: 'tahoma', fontSize: 22, color: '#000000ff' })
         let passwordtext = this.add.text(-50, 8, "password", { fontFamily: 'tahoma', fontSize: 22, color: '#000000ff' })
+
+        this.text = this.add.text(-150, 110,"",{fontFamily: 'tahoma', fontSize: 22, color: 'rgb(255, 0, 0)'}).setVisible(false);
+
 
         let username = "";
         let password = "";
@@ -40,7 +63,8 @@ export default class Register extends Scene {
 
         this.RegistContainer.addAt(this.SignupWindow, 0);
         this.RegistContainer.addAt(usernametext, 1);
-        this.RegistContainer.addAt(passwordtext, 2)
+        this.RegistContainer.addAt(passwordtext, 2);
+        this.RegistContainer.addAt(this.text,3);
 
         this.RegistContainer.setInteractive({
             hitArea: {},
@@ -71,17 +95,6 @@ export default class Register extends Scene {
             cursor: "url(assets/cursors/harrow.cur), pointer",
         });
 
-        this.input.on('pointerdown', (pointer) => {
-            if (!this.RegistContainer) return;
-            // Welt-Koordinaten des Pointers
-            const worldX = pointer.x;
-            const worldY = pointer.y;
-            // Lokale Koordinaten relativ zum Container (einfacher Fall: kein Scale/Rotation)
-            const localX = worldX - this.RegistContainer.x;
-            const localY = worldY - this.RegistContainer.y;
-            console.log('world:', worldX, worldY, 'container local:', localX, localY);
-        });
-
         this.RegistContainer.on("pointerdown", () => {
             switch (this.activeZone) {
                 case "user":
@@ -97,9 +110,11 @@ export default class Register extends Scene {
                 case "continue":
                     UserPost(this);
                     async function UserPost(scene) {
-                        const ExisUser = await fetch(`http://localhost:3000/player/acount/login/${username}`);
+                        const ExisUser = await fetch(`https://bitcoinclicker.site/api/player/acount/login/${username}`);
                         if(!ExisUser.ok){
-                            console.log("Benutzername oder Passwort ungültig");
+                            scene.text.setVisible(true);
+                            scene.text.setText("Invalid username or password");
+                            scene.sound.play("ErrorSound");
                             return;
                         }
                         const ExisUserJson = await ExisUser.json();
@@ -107,16 +122,20 @@ export default class Register extends Scene {
                         console.log(ExisUserJson);
 
                         if(ExisUserJson.length != 0){
-                            console.log("Benutzername bereits vergeben");
+                            scene.text.setVisible(true);
+                            scene.text.setText("Username already in use");
+                            scene.sound.play("ErrorSound");
                             return;
                         }
 
-                        if(username.trim == "" || password.trim == ""){
-                            console.log("Benutzername oder Passwort ungültig");
+                        if(username.trim() == "" || password.trim() == ""){
+                            scene.text.setVisible(true);
+                            scene.text.setText("Invalid username or password");
+                            scene.sound.play("ErrorSound");
                             return;
                         }
 
-                        const User = await fetch(`http://localhost:3000/player/acount/create`,{
+                        const User = await fetch(`https://bitcoinclicker.site/api/player/acount/create`,{
                             method: "POST",
                             headers: {'Content-Type': 'application/json'},
                             body: JSON.stringify({
@@ -125,7 +144,9 @@ export default class Register extends Scene {
                             })
                         });
                         if(!User.ok){
-                            console.log("Fehler beim Erstellen des Benutzers");
+                            scene.text.setVisible(true);
+                            scene.text.setText("Error creating the user");
+                            scene.sound.play("ErrorSound");
                             return;
                         }else{
                             scene.scene.start("MainMenu");
@@ -133,12 +154,13 @@ export default class Register extends Scene {
                     }
                     break;
                 case "Login":
+                    this.sound.stopByKey("BackgroundSound");
                     this.scene.start('MainMenu');
-
                     break;
                 case "Guestlogin":
+                    this.sound.stopByKey("BackgroundSound");
+                    this.sound.play("LoginSound");  
                     this.scene.start('MainGame')
-
                     break;
                 default:
                     break;
@@ -150,10 +172,12 @@ export default class Register extends Scene {
             if (usernameeingabe == true) {
                 if (event.key == "Backspace") {
                     username = username.slice(0, -1);
+                    this.sound.play("KeyboardSound");
                     console.log("username: ", username)
                     usernametext.setText(username);
                 } else if (event.code.startsWith("Key")) {
                     username += event.key;
+                    this.sound.play("KeyboardSound");
                     console.log("username: ", username)
                     usernametext.setText(username);
                 }
@@ -162,10 +186,12 @@ export default class Register extends Scene {
             if (passwordeingabe == true) {
                 if (event.key == "Backspace") {
                     password = password.slice(0, -1);
+                    this.sound.play("KeyboardSound");
                     console.log("password: ", password)
                     passwordtext.setText(password)
                 } else if (event.code.startsWith("Key")) {
                     password += event.key;
+                    this.sound.play("KeyboardSound");
                     console.log("password: ", password)
                     passwordtext.setText(password)
                 }

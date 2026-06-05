@@ -172,15 +172,18 @@ export default class MainGame extends Scene {
         //Laden der Sounds
         this.load.audio("CoinClickSound","CoinClickSound.mp3");
         this.load.audio("DeclineSound","DeclineSound.mp3");
+        this.load.audio("BackgroundSound","PCSound.mp3");
+        this.load.audio("MouseClickSound","MouseClickSound.mp3");
+        this.load.audio("BuySound","BuySound.mp3");
 
         
         this.load.once("complete", async() => {
 
-            const GPUFetch = await fetch('http://localhost:3000/gpudata');
+            const GPUFetch = await fetch('https://bitcoinclicker.site/api/gpudata');
             this.arrGPU = await GPUFetch.json();
 
 
-            console.log(this.arrGPU);
+            console.log(this.arrGPU);       ///////
 
 
                 this.arrGPU.forEach(( GPUStats,i) => {
@@ -191,7 +194,7 @@ export default class MainGame extends Scene {
 
                 this.load.once('complete', () => {
                 this.arrGPU.forEach((GPUStats, i) => {
-                    console.log(this.textures.exists(`GPU${i}`));
+                    console.log(this.textures.exists(`GPU${i}`));       ///////
 
                     this[`GPU${i}`] = this.add.image(0, 0, `GPU${i}`).setVisible(false);
                 });
@@ -201,41 +204,39 @@ export default class MainGame extends Scene {
             this.load.start();
         });
 
-        console.log(this.userData);
+        console.log(this.userData);         //////
 
         if(this.userData != undefined){
             this.load.once("complete", async () => {
-                const SavePlayerprogress = await fetch(`http://localhost:3000/player/progress/getdata/${this.userData.Player_ID}`);
+                const SavePlayerprogress = await fetch(`https://bitcoinclicker.site/api/player/progress/getdata/${this.userData.Player_ID}`);
                 if(!SavePlayerprogress.ok){
                     console.log("Fehler beim Abrufen des Spielerfortschritts");
                 }
                 this.SavePlayerprogressJSON = await SavePlayerprogress.json();
-                console.log(this.SavePlayerprogressJSON);
+                console.log(this.SavePlayerprogressJSON);                   ///////
                 if(this.SavePlayerprogressJSON.length != 0){
                     this.score = this.SavePlayerprogressJSON[0] ?.BTC;
-                    const SaveGpuprogress = await fetch(`http://localhost:3000/player/progress/gpuprogress/getdata/${this.SavePlayerprogressJSON[0].PlayerProgress_ID}`);
+                    const SaveGpuprogress = await fetch(`https://bitcoinclicker.site/api/player/progress/gpuprogress/getdata/${this.SavePlayerprogressJSON[0].PlayerProgress_ID}`);
                     if(!SaveGpuprogress.ok){
                         console.log("Fehler beim Abrufen des Spielerfortschritts");
                     }
                     this.SaveGpuprogressJSON = await SaveGpuprogress.json();
-                    console.log(this.SaveGpuprogressJSON);
+                    console.log(this.SaveGpuprogressJSON);          ///////
                     if(this.SaveGpuprogressJSON.lenght != 0){
-                        const SaveGPUPlayerSlot = await fetch(`http://localhost:3000/player/progress/gpuslot/getdata/${this.SaveGpuprogressJSON[0].GPUProgress_ID}`);
+                        const SaveGPUPlayerSlot = await fetch(`https://bitcoinclicker.site/api/player/progress/gpuslot/getdata/${this.SaveGpuprogressJSON[0].GPUProgress_ID}`);
                         if(!SaveGPUPlayerSlot.ok){
                             console.log("Fehler beim Abrufen des Spielerfortschritts");
                         }
                         this.SaveGPUPlayerSlotJSON = await SaveGPUPlayerSlot.json();
-                        console.log(this.SaveGPUPlayerSlotJSON);
+                        console.log(this.SaveGPUPlayerSlotJSON);        //////
                         this.SaveGPUPlayerSlotJSON.forEach((GPUSolt, i) => {
                             this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Prices = GPUSolt.GPU_Prices;
                             this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Amount = GPUSolt.GPU_Amount;
                             this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Status = GPUSolt.GPU_Status === `true`;
-                            console.log(GPUSolt.GPU_Prices);
-                            console.log(this.arrGPUStats[`arrGPU${GPUSolt.GPU_ID-1}Stats`].GPU_Status);
                         });
                     }
                 }else{
-                    const PlayerProgress = await fetch ("http://localhost:3000/player/progress", {
+                    const PlayerProgress = await fetch ("https://bitcoinclicker.site/api/player/progress", {
                         method: "POST",
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
@@ -247,13 +248,13 @@ export default class MainGame extends Scene {
                         console.log("Fehler beim Erstellen des Spielerfortschritts");
                     }
 
-                    const SavePlayerprogress = await fetch(`http://localhost:3000/player/progress/getdata/${this.userData.Player_ID}`);
+                    const SavePlayerprogress = await fetch(`https://bitcoinclicker.site/api/player/progress/getdata/${this.userData.Player_ID}`);
                     if(!SavePlayerprogress.ok){
                         console.log("Fehler beim Abrufen des Spielerfortschritts");
                     }
                     this.SavePlayerprogressJSON = await SavePlayerprogress.json();
 
-                    const GPUProgress = await fetch ("http://localhost:3000/player/progress/gpuprogress", {
+                    const GPUProgress = await fetch ("https://bitcoinclicker.site/api/player/progress/gpuprogress", {
                         method: "POST",
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
@@ -264,7 +265,7 @@ export default class MainGame extends Scene {
                         console.log("Fehler beim Erstellen des GPU Fortschritts");
                     }
 
-                    const SaveGpuprogress = await fetch(`http://localhost:3000/player/progress/gpuprogress/getdata/${this.SavePlayerprogressJSON[0].PlayerProgress_ID}`);
+                    const SaveGpuprogress = await fetch(`https://bitcoinclicker.site/api/player/progress/gpuprogress/getdata/${this.SavePlayerprogressJSON[0].PlayerProgress_ID}`);
                     if(!SaveGpuprogress.ok){
                         console.log("Fehler beim Abrufen des GPU Fortschritts");
                     }
@@ -304,6 +305,16 @@ export default class MainGame extends Scene {
             this.activeWindow = container;
         }
 
+        //Mouse Click Sound
+        this.input.on("pointerdown",()=>{
+            this.sound.play("MouseClickSound");
+        });
+
+        //BackgroundSound
+        this.sound.add("BackgroundSound", {
+            loop: true,
+            volume: 0.3,
+        }).play();
 
         //Reagiert wenn die Größe sich verändert
         this.scale.on('resize', this.onResize, this);
@@ -322,7 +333,7 @@ export default class MainGame extends Scene {
         //Fortschrit Speichern
         this.onBeforeUnload = () => {
             if(this.userData != undefined){
-                fetch ("http://localhost:3000/player/progress", {
+                fetch ("https://bitcoinclicker.site/api/player/progress", {
                     method: "POST",
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -335,7 +346,7 @@ export default class MainGame extends Scene {
                     if(this.arrGPUStats[`arrGPU${i}Stats`].GPU_Status == true){
                         const alreadySaved = this.SaveGPUPlayerSlotJSON?.some(slot => slot.GPU_ID == i + 1);
                         if(!alreadySaved){
-                            fetch ("http://localhost:3000/player/progress/gpuslot", {
+                            fetch ("https://bitcoinclicker.site/api/player/progress/gpuslot", {
                                 method: "POST",
                                 headers: {'Content-Type': 'application/json'},
                                 body: JSON.stringify({
@@ -349,7 +360,7 @@ export default class MainGame extends Scene {
                             });
                         }else{
                             const savedSlot = this.SaveGPUPlayerSlotJSON.find(slot => slot.GPU_ID == i + 1);
-                            fetch ("http://localhost:3000/player/progress/gpuslot/upgrade", {
+                            fetch ("https://bitcoinclicker.site/api/player/progress/gpuslot/upgrade", {
                                 method: "POST",
                                 headers: {'Content-Type': 'application/json'},
                                 body: JSON.stringify({

@@ -16,6 +16,12 @@ export default class MainMenu extends Scene {
     preload(){
         this.load.image("loginBackground","assets/loginBackground.png");
         this.load.image("loginwindow","assets/login_fenster.png");
+
+        this.load.audio("BackgroundSound","assets/PCSound.mp3");
+        this.load.audio("MouseClickSound","assets/MouseClickSound.mp3");
+        this.load.audio("LoginSound","assets/LoginSound.mp3");
+        this.load.audio("ErrorSound","assets/ErrorSound.mp3");
+        this.load.audio("KeyboardSound","assets/KeyboardSound.mp3");
     }
 
     create() {
@@ -23,6 +29,16 @@ export default class MainMenu extends Scene {
         //Setzten des Deault Courser
         this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), default");
 
+        //Mouse Click Sound
+        this.input.on("pointerdown",()=>{
+            this.sound.play("MouseClickSound");
+        });
+
+        //BackgroundSound
+        this.sound.add("BackgroundSound", {
+            loop: true,
+            volume: 0.3,
+        }).play();
 
         const W = this.scale.width;
         const H = this.scale.height;
@@ -35,6 +51,7 @@ export default class MainMenu extends Scene {
 
         let usernametext = this.add.text(-50, -45, "username", {fontFamily: 'tahoma', fontSize: 22, color: '#000000ff'} )
         let passwordtext = this.add.text(-50, 8, "password", {fontFamily: 'tahoma', fontSize: 22, color: '#000000ff'} )
+        this.text = this.add.text(-125, 100,"",{fontFamily: 'tahoma', fontSize: 22, color: 'rgb(255, 0, 0)'}).setVisible(false);
 
         let username = "";
         let password = "";
@@ -49,6 +66,7 @@ export default class MainMenu extends Scene {
         this.logincontainer.addAt(this.loginWindow,0);
         this.logincontainer.addAt(usernametext, 1);
         this.logincontainer.addAt(passwordtext, 2)
+        this.logincontainer.addAt(this.text,3);
 
         this.logincontainer.setInteractive({
             hitArea: {},
@@ -79,16 +97,6 @@ export default class MainMenu extends Scene {
         cursor: "url(assets/cursors/harrow.cur), pointer",
     });
 
-this.input.on('pointerdown', (pointer) => {
-    if (!this.logincontainer) return;
-    // Welt-Koordinaten des Pointers
-    const worldX = pointer.x;
-    const worldY = pointer.y;
-    // Lokale Koordinaten relativ zum Container (einfacher Fall: kein Scale/Rotation)
-    const localX = worldX - this.logincontainer.x;
-    const localY = worldY - this.logincontainer.y;
-    console.log('world:', worldX, worldY, 'container local:', localX, localY);
-});
 
         this.logincontainer.on("pointerdown", ()=>{
             switch (this.activeZone) {
@@ -105,30 +113,40 @@ this.input.on('pointerdown', (pointer) => {
                 case "continue":
                     UserFetch(this);
                     async function UserFetch(scene) {
-                        const User = await fetch(`http://localhost:3000/player/acount/login/${username}`);
+                        const User = await fetch(`https://bitcoinclicker.site/api/player/acount/login/${username}`);
                         if(!User.ok){
-                            console.log("Fehler beim Abrufen der Benutzerdaten");
+                            scene.text.setVisible(true);
+                            scene.text.setText("Error retrieving user data");
+                            scene.sound.play("ErrorSound");
                         }
                         const UserJson = await User.json();
 
                         if(UserJson.length == 0){
-                            console.log("Benutzer existiert nicht");
+                            scene.text.setVisible(true);
+                            scene.text.setText("User does not exist");
+                            scene.sound.play("ErrorSound");
                             return;
                         }
 
                         if(password === UserJson[0].Password){
+                            this.sound.play("LoginSound");
                             scene.scene.start('MainGame',{
                                 userData: UserJson[0]
                             });
                         }else{
-                            console.log("Falsches Passwort");
+                            scene.text.setVisible(true);
+                            scene.text.setText("Incorrect password");
+                            scene.sound.play("ErrorSound");
                         }
                     }
                     break;
                 case "Register":
+                    this.sound.stopByKey("BackgroundSound");
                     this.scene.start('Register');
                     break;   
                 case "Guestlogin":
+                    this.sound.stopByKey("BackgroundSound");
+                    this.sound.play("LoginSound");
                     this.scene.start('MainGame')
                     break; 
                 default:
@@ -143,10 +161,12 @@ this.input.keyboard.on("keydown", (event) => {
     if (usernameeingabe == true) {
         if (event.key == "Backspace") {
             username = username.slice(0, -1);
+            this.sound.play("KeyboardSound");
             console.log("username: ", username)
             usernametext.setText(username);
         } else if(event.code.startsWith("Key")){
             username += event.key;
+            this.sound.play("KeyboardSound");
             console.log("username: ", username)
             usernametext.setText(username);
         }
@@ -156,10 +176,12 @@ this.input.keyboard.on("keydown", (event) => {
         if(event.key == "Backspace"){
             password = password.slice(0, -1);
             ZensurPassword = ZensurPassword.slice(0, -1);
+            this.sound.play("KeyboardSound");
             console.log("password: ", password)
             passwordtext.setText(ZensurPassword);
         } else if (event.code.startsWith("Key")) {
             password += event.key;
+            this.sound.play("KeyboardSound");
             ZensurPassword = ZensurPassword.concat("","*");
             console.log("password: ", password);
             console.log("password: ", ZensurPassword);

@@ -3,7 +3,6 @@ import { addToScore, GPUPrices, GPUScore } from './f_addScore';
 export function __BitcoinEXE__(scene) {
     scene.ToolbarCoin.on("pointerdown", () => {
         if (scene.C_BitcoinEXE === null) {
-            console.log("Bitcoin.exe");
             scene.BitCoinEXEBackground = scene.add.image(0, 0, "BitCoinEXEBackground");
             scene.coin = scene.add.image(0, 75, "coin");
             scene.scoreboard = scene.add.text(-10, -200, scene.score, { 
@@ -121,7 +120,6 @@ export function __BitcoinEXE__(scene) {
             scene.coin = null;
             scene.scoreboard = null;
             scene.C_BitcoinEXE = null;
-            console.log("closed");
         }
     });
 }
@@ -130,7 +128,6 @@ export function __UpgradeEXE__(scene) {
     scene.ToolbarUpgrades.on("pointerdown", () => {
         if(scene.C_UpgradeEXE === null){
 
-            console.log("Upgrade.exe");
             scene.UpdateEXEBackground = scene.add.image(0,0,"UpdateEXEBackground");
             scene.UpdateEXEFrontBackground = scene.add.image(0,5,"UpdateEXEFrontBackground");
 
@@ -293,7 +290,6 @@ export function __UpgradeEXE__(scene) {
 
                 scene[`GPU${i}`].on("pointerdown", () => {
                     if (scene.score >= scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices){
-                        console.log("GPU1");
 
                         scene.score -=  scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices;
 
@@ -310,6 +306,8 @@ export function __UpgradeEXE__(scene) {
                         if(scene.scoreboard != null || undefined){
                             scene.scoreboard.setText(Math.round(scene.score));
                         }
+
+                        scene.sound.play("BuySound");
 
                     }else if(scene.score < scene.arrGPUStats[`arrGPU${i}Stats`].GPU_Prices){
                         scene.sound.play("DeclineSound");
