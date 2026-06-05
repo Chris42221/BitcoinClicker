@@ -129,7 +129,7 @@ export default class MainMenu extends Scene {
                         }
 
                         if(password === UserJson[0].Password){
-                            this.sound.play("LoginSound");
+                            scene.sound.play("LoginSound");
                             scene.scene.start('MainGame',{
                                 userData: UserJson[0]
                             });
