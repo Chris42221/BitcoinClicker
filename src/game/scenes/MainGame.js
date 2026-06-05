@@ -157,24 +157,22 @@ export default class MainGame extends Scene {
 
     preload() {
         // Ressourcen laden
-        //Laden der Pfade
-        this.load.setPath('assets');
 
         //Laden der Bilder
-        this.load.image("GameBackground","GameBackground.png");
-        this.load.image("coin","coin.png");
-        this.load.image("upgrade","Upgrade.png");
-        this.load.image("BitCoinEXEBackground","BitCoinEXEBackground.png");
-        this.load.image("UpdateEXEBackground","UpdateEXEBackground.png");
-        this.load.image("UpdateEXEFrontBackground","FrontBackground.png");
+        this.load.image("GameBackground","assets/GameBackground.png");
+        this.load.image("coin","assets/coin.png");
+        this.load.image("upgrade","assets/Upgrade.png");
+        this.load.image("BitCoinEXEBackground","assets/BitCoinEXEBackground.png");
+        this.load.image("UpdateEXEBackground","assets/UpdateEXEBackground.png");
+        this.load.image("UpdateEXEFrontBackground","assets/FrontBackground.png");
 
 
         //Laden der Sounds
-        this.load.audio("CoinClickSound","CoinClickSound.mp3");
-        this.load.audio("DeclineSound","DeclineSound.mp3");
-        this.load.audio("BackgroundSound","PCSound.mp3");
-        this.load.audio("MouseClickSound","MouseClickSound.mp3");
-        this.load.audio("BuySound","BuySound.mp3");
+        this.load.audio("CoinClickSound","assets/CoinClickSound.mp3");
+        this.load.audio("DeclineSound","assets/DeclineSound.mp3");
+        this.load.audio("BackgroundSound","assets/PCSound.mp3");
+        this.load.audio("MouseClickSound","assets/MouseClickSound.mp3");
+        this.load.audio("BuySound","assets/BuySound.mp3");
 
         
         this.load.once("complete", async() => {
