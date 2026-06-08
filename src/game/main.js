@@ -2,6 +2,7 @@ import { AUTO, Game } from 'phaser';
 import MainGame from './scenes/MainGame';
 import MainMenu from './scenes/MainMenu';
 import Register from './scenes/register';
+import credits from './scenes/credits';
 
 
 const config = {
@@ -22,7 +23,7 @@ const config = {
     MainMenu, 
     MainGame,
     Register,
-
+    credits,
   ]
 }; 
 
