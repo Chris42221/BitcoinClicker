@@ -24,7 +24,7 @@ export function __BitcoinEXE__(scene) {
                 hitArea: {},
                 hitAreaCallback: (area, x, y) => {
                     // Prüfen ob ein anderes Fenster mit höherer Depth darüber liegt
-                    const windows = [scene.C_BitcoinEXE, scene.C_UpgradeEXE]
+                    const windows = [scene.C_Settings,scene.C_BitcoinEXE, scene.C_UpgradeEXE]
                         .filter(w => w !== null && w !== scene.C_BitcoinEXE);
 
                     const isBlocked = windows.some(w => {
@@ -176,7 +176,7 @@ export function __UpgradeEXE__(scene) {
                 hitAreaCallback: (area, x, y) => {
 
                 // Prüfen ob ein anderes Fenster mit höherer Depth darüber liegt
-                const windows = [scene.C_BitcoinEXE, scene.C_UpgradeEXE]
+                const windows = [scene.C_Settings,scene.C_BitcoinEXE, scene.C_UpgradeEXE]
                     .filter(w => w !== null && w !== scene.C_UpgradeEXE);
 
                 const isBlocked = windows.some(w => {
@@ -326,6 +326,97 @@ export function __UpgradeEXE__(scene) {
             scene.UpdateEXEBackground = null;
             scene.C_UpgradeEXE = null;
             scene.UpdateEXEFrontBackground = null;
+        }
+    })
+}
+
+export function __Settings__(scene){
+    scene.Settings.on("pointerdown",()=>{
+        if(scene.C_Settings === null){
+            scene.SettingsBackground = scene.add.image(0,0,"Settings");
+            scene.SettingsText1 = scene.add.text(-140, -7, scene.arrSettingsText.User, { 
+                fontFamily: 'tahoma', 
+                fontSize: 18, 
+                color: '#000000' 
+            });
+            scene.SettingsText2 = scene.add.text(-140, 45, scene.arrSettingsText.Date, { 
+                fontFamily: 'tahoma', 
+                fontSize: 18, 
+                color: '#000000' 
+            });
+            scene.SettingsText3 = scene.add.text(60,-60,scene.arrSettingsText.Text,{
+                fontFamily: 'tahoma',
+                fontSize: 10,
+                color: '#000000'
+            })
+
+            scene.C_Settings = scene.add.container(
+                scene.scale.width / 2,
+                scene.scale.height / 2
+            )
+
+            scene.C_Settings.addAt(scene.SettingsBackground,0);
+            scene.C_Settings.addAt(scene.SettingsText1,1);
+            scene.C_Settings.addAt(scene.SettingsText2,1);
+            scene.C_Settings.addAt(scene.SettingsText3,1);
+            scene.bringToFront(scene.C_Settings);
+        
+            scene.C_Settings.setInteractive({
+                hitArea: {},
+                hitAreaCallback: (area, x, y) => {
+
+                // Prüfen ob ein anderes Fenster mit höherer Depth darüber liegt
+                const windows = [scene.C_Settings,scene.C_BitcoinEXE, scene.C_UpgradeEXE]
+                    .filter(w => w !== null && w !== scene.C_Settings);
+
+                const isBlocked = windows.some(w => {
+                    if(w.depth <= scene.C_Settings.depth) return false;
+                    // Prüfen ob der Klickpunkt innerhalb des anderen Fensters liegt
+                    const bounds = w.getBounds();
+                    return bounds.contains(
+                        scene.C_Settings.x + x,
+                        scene.C_Settings.y + y
+                    );
+                });
+
+                if(isBlocked) return false;
+
+                    if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(97, -78, 45, 20), x, y)) {
+                        scene.activeZone = "save";
+                        return true;
+                    }
+                    scene.activeZone = null;
+                    return false;
+                },
+                cursor: "url(assets/cursors/harrow.cur), pointer",
+            });
+
+            scene.C_Settings.on("pointerdown",()=>{
+                scene.bringToFront(scene.C_Settings);
+                switch (scene.activeZone) {
+                    case "save":
+                        scene.onBeforeUnload();
+                        break;
+                    default:
+                        break;
+                }
+            })
+
+            function SetSettingsText(text,status){
+                if(status == 1){
+                    scene.SettingsText3.setText(text);
+                }else if(status == 2){
+                    scene.SettingsText3.setText(text);
+                }else{
+                    scene.SettingsText3.setText(text);
+                }
+            }
+            
+            return { SetSettingsText };
+        }else{
+            scene.C_Settings.destroy();
+            scene.SettingsBackground = null;
+            scene.C_Settings = null;
         }
     })
 }

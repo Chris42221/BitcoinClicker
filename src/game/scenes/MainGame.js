@@ -1,7 +1,7 @@
-import { Scene } from 'phaser';
+import { GameObjects, Scene } from 'phaser';
 import { addToScore, GPUPrices, GPUScore } from './f_addScore';
 import { ScaleFaktor, getResponsiveSize } from './f_update';
-import { __BitcoinEXE__, __UpgradeEXE__ } from './gf_Toolbar';
+import { __BitcoinEXE__, __Settings__, __UpgradeEXE__ } from './gf_Toolbar';
 
 export default class MainGame extends Scene {
 
@@ -11,6 +11,17 @@ export default class MainGame extends Scene {
     BitCoinEXEBackground;
     UpdateEXEBackground;
     UpdateEXEFrontBackground;
+    SettingsBackground;
+    SettingsFunctions;
+
+    arrSettingsText = {
+        User: "anonymous",
+        Date: "undefined",
+        Text: ""
+    }
+    SettingsText1;
+    SettingsText2;
+    SettingsText3;
 
     activeWindow = null;
     activeZone = null;
@@ -26,10 +37,12 @@ export default class MainGame extends Scene {
     //Tollbar
     ToolbarCoin;
     ToolbarUpgrades;
+    Settings;
 
     //Container
     C_BitcoinEXE = null;
     C_UpgradeEXE = null;
+    C_Settings = null;
 
     //Grafikkarten
     GPU0;
@@ -153,6 +166,10 @@ export default class MainGame extends Scene {
         });
 
         this.userData = data.userData;
+        if(this.userData != undefined){
+            this.arrSettingsText.User = this.userData.Username;
+            this.arrSettingsText.Date = this.userData.Created_At;
+        }
     }
 
     preload() {
@@ -165,6 +182,7 @@ export default class MainGame extends Scene {
         this.load.image("BitCoinEXEBackground","assets/BitCoinEXEBackground.png");
         this.load.image("UpdateEXEBackground","assets/UpdateEXEBackground.png");
         this.load.image("UpdateEXEFrontBackground","assets/FrontBackground.png");
+        this.load.image("Settings","assets/Settings.png");
 
 
         //Laden der Sounds
@@ -296,6 +314,9 @@ export default class MainGame extends Scene {
         this.ToolbarCoin.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
         this.ToolbarUpgrades.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
 
+        this.Settings = this.add.zone(W * 0.0225, H * 0.9777, 40, 40);
+        this.Settings.setInteractive({cursor: "url(assets/cursors/harrow.cur), pointer"});
+
         // Funktion die jedes Fenster aufruft wenn es angeklickt wird
         this.bringToFront = function(container) {
             this.windowDepth++;
@@ -324,6 +345,7 @@ export default class MainGame extends Scene {
         //Überprüft ob ein Game Objekt was eine Funktion hat angelickt wurde
         __BitcoinEXE__(this);
         __UpgradeEXE__(this);
+        this.SettingsFunctions = __Settings__(this);
 
         //Intervall in dem das Spiel den Punktestand (Bitcoin Stand) updatet anhand der gekauften Grafikkarten
         setInterval(() => this.UpdateTheScoreOfBitcoin(), 100);
@@ -374,7 +396,12 @@ export default class MainGame extends Scene {
                         };
                     };
                 });
-            };
+                console.log("Fortschrit gespeichert");
+                this.sound.play("LoginSound");
+            }else{
+                this.sound.play("ErrorSound");
+                //this.SettingsFunctions.SetSettingsText("To save, you need an account",3);
+            }
         };
 
         window.addEventListener('beforeunload', this.onBeforeUnload);
@@ -411,6 +438,9 @@ export default class MainGame extends Scene {
 
         let sizeCU = getResponsiveSize(this.UpdateEXEBackground?.width,this.UpdateEXEBackground?.height,window.innerWidth,window.innerHeight);
         this.C_UpgradeEXE ?.setScale(sizeCU.scale/1.4);
+
+        let sizeCS = getResponsiveSize(this.SettingsBackground?.width,this.SettingsBackground?.height,window.innerWidth,window.innerHeight);
+        this.C_Settings ?.setScale(sizeCS.scale/5);
     }
 
     //Setzt die Position neu anhand der Bildschirmposition
@@ -422,6 +452,7 @@ export default class MainGame extends Scene {
 
         this.ToolbarCoin ?.setPosition(W*0.21,H*0.9777);
         this.ToolbarUpgrades ?.setPosition(W*0.235,H*0.9777);
+        this.Settings ?.setPosition(W * 0.0225, H * 0.9777);
     };
 }
 
