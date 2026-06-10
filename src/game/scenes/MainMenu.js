@@ -26,6 +26,9 @@ export default class MainMenu extends Scene {
 
     create() {
 
+
+
+
         //Setzten des Deault Courser
         this.input.setDefaultCursor("url(assets/cursors/arrow_m.cur), default");
 
@@ -93,6 +96,10 @@ export default class MainMenu extends Scene {
                 this.activeZone = "Guestlogin";
                 return true;
                 };
+                if (Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(85, -214, 70, 24), x, y)) {
+                this.activeZone = "credits";
+                return true;
+                };
         },
         cursor: "url(assets/cursors/harrow.cur), pointer",
     });
@@ -149,6 +156,10 @@ export default class MainMenu extends Scene {
                     this.sound.play("LoginSound");
                     this.scene.start('MainGame')
                     break; 
+                case "credits":
+                    this.sound.stopByKey("BackgroundSound");
+                    this.scene.start('credits');
+                    break;
                 default:
                     break;
 
