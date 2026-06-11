@@ -395,24 +395,12 @@ export function __Settings__(scene){
                 scene.bringToFront(scene.C_Settings);
                 switch (scene.activeZone) {
                     case "save":
-                        scene.onBeforeUnload();
+                        scene.SaveData();
                         break;
                     default:
                         break;
                 }
             })
-
-            function SetSettingsText(text,status){
-                if(status == 1){
-                    scene.SettingsText3.setText(text);
-                }else if(status == 2){
-                    scene.SettingsText3.setText(text);
-                }else{
-                    scene.SettingsText3.setText(text);
-                }
-            }
-            
-            return { SetSettingsText };
         }else{
             scene.C_Settings.destroy();
             scene.SettingsBackground = null;
